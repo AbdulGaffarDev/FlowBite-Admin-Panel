@@ -37,14 +37,20 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
             updatedData.country = country;
             updatedData.profilePic = `https://randomuser.me/api/portraits/${gender}/${randomNumber}.jpg`;
         }
-        console.log('Updated data ', updatedData)
         await fetchData({url, method, body : updatedData})
                 .then(() => {
-                    console.log("Testing", method === 'PUT')
-                    method === 'POST' ? setOperationStatus('added') : setOperationStatus('updated');
+                    if(method === 'POST'){
+                        setOperationStatus('added')
+                    }
+                    else{
+                        setOperationStatus('updated');
+                    }
+                    //API is responding with null when user is updated or added. 
+                    // If API respond with data then whole data on the page will be updated. Logic for this is written.
+                    setUpdatedData(data); //Send data to the parent component
                 })
                 .catch(err => {
-                    console.log("Error")
+                    console.log("Something wents wrong")
                     console.log(`${method} Operation failed ${err.message}`);
                     method === 'POST' ? setOperationStatus('addFailed') : setOperationStatus('updateFailed')
                 })
@@ -54,9 +60,7 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                         handleClose()
                     }
                 }, 4000)
-        console.log(data)
-        console.log("API Error " , error);
-        setUpdatedData(data); //Send data to the parent component
+        
     }
     
     const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
@@ -71,7 +75,6 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
         },
         validationSchema : UserFormSchema,
         onSubmit : async(values, {resetForm}) => {
-                console.log("Form Values", values)
                 await callFetchHook(
                     {
                     url : `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${userObj?.id||''}`,
@@ -82,7 +85,6 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                 resetForm();
         }
     })
-    // console.log("ERR : ", errors);
 
       //Check whether value is updated or not to diable or enable the submit button
     useEffect(()=>{
@@ -128,7 +130,7 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                             <label>First Name *</label><br />
                             <input 
                                 type="text" 
-                                placeholder='Abdul' 
+                                placeholder='First Name' 
                                 name='firstName'
                                 value={values.firstName }
                                 onChange={handleChange}
@@ -139,7 +141,7 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                         </div>
                         <div className='w-[50%]'>
                             <label>Last Name </label><br />
-                            <input type="text" placeholder='Gaffar'  name='lastName'
+                            <input type="text" placeholder='Last Name'  name='lastName'
                                 className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full  bg-gray-50 mt-2'
                                 value={values.lastName }
                                 onChange={handleChange}
@@ -257,7 +259,6 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                 alertType={'danger'} 
             />
          }
-         {console.log('operationStatus : ', operationStatus)}
         {operationStatus === 'added' &&
             <Alert 
                 heading={"User Added"} 

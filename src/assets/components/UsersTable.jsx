@@ -5,7 +5,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import Add_User_Form from './Add User Form';
 import Alert from './Alert';
 
-function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTerm, setUpdatedData, updatedData}) {
+function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTerm, setUpdatedData, updatedData, deleteSelectedUser, setDeleteSelectedUser}) {
     let {data, loading, error, fetchData} = useFetch()
     let [selectedUsers, setSelectedUsers] = useState({});
     let [userToEdit, setUserToEdit] = useState()
@@ -13,7 +13,10 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
     let [dataToPrint, setDataToPrint] = useState([]);
     let [userToDelete, setUserToDelete] = useState(false)
     let [isDeleted, setisDeleted] = useState(null)
-    
+    let [multipleUsersDeleted, setMultipleUsersDeleted] = useState({
+                                                            noOfUsersFailedToDelete : 0,
+                                                            noOfDeletedUsers : 0,
+                                                            });
     
     useEffect(() => {
         fetchData({url : 'https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/'})
@@ -85,11 +88,11 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
         setUserToEdit(null)
     }
 
+    //handle single delete
     const handleDelete = (e) => {
         const id = e.target.parentNode.id;
         const userData = dataToPrint.find(user=> user.id === id)
         setUserToDelete(userData);
-        console.log(userData)
         fetchData({
             url : `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${id}`,
             method : 'DELETE',
@@ -107,6 +110,47 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
             }, 5000)
 
     }
+
+    //handle multiple delete
+    useEffect(()=> {
+        let noOfDeletedUsers = 0;
+        let noOfUsersFailedToDelete = 0;
+        if(deleteSelectedUser){
+            const deletePromises = dataToPrint.filter(user => selectedUsers[user.id])
+            .map(
+                user => 
+                    fetchData({
+                        url: `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${user.id}`,
+                        method: 'DELETE',
+                    })
+                    .then(() => {
+                        noOfDeletedUsers++;
+                        setNoOfSelectedUsers(0)
+                    })
+                    .catch((err) => {
+                        console.log(`Unable to delete ${user.firstName} ${user.lastName} due to ${err}`);
+                        console.log("user not deleted : ",data)
+                        noOfUsersFailedToDelete++;
+
+                    })
+            )
+            Promise.all(deletePromises)
+            .then(() => {
+                if(!error){
+                       let deletedUsers = dataToPrint.filter(user => selectedUsers[user.id])
+                       const remainingUsers = dataToPrint.filter(user =>
+                            !deletedUsers.some(deleted => deleted.id === user.id)
+                        );
+                       setDataToPrint(remainingUsers);
+                    }
+                setMultipleUsersDeleted({
+                    noOfDeletedUsers,
+                    noOfUsersFailedToDelete,
+                })
+                setDeleteSelectedUser(false);
+            })
+        }
+    },[deleteSelectedUser])
     return (
     <div className={`w-full`}>
         {!dataToPrint && loading && 
@@ -119,7 +163,6 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
         }    */}
         {error && 
            <div className='text-center mt-5 text-red-500 font-bold text-lg'>
-            {/* {console.log(error)} */}
                 {error.message}
            </div>
 
@@ -223,13 +266,6 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                             setUpdatedData = {setUpdatedData} 
                         />
             }
-            {/* {updatedData  && loading && 
-                <Alert 
-                    heading={"Updating User..."} 
-                    message={"Please wait while we save the changes."}
-                    alertType={'normal'}
-                />
-            } */}
             {userToDelete && loading && 
                 <Alert 
                     heading={"Deleting User..."} 
@@ -244,12 +280,29 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                     alertType={'normal'}
                 />
             }
-            {console.log("Is Deleted : ", isDeleted)}
             {!isDeleted &&  error && 
                 <Alert 
                     heading={"Delete User Failed"} 
                     message={"Unable to delete the user due to " + error.message}
                     alertType={'danger'}
+                />
+            }
+            {(multipleUsersDeleted.noOfDeletedUsers !== 0 || multipleUsersDeleted.noOfUsersFailedToDelete !== 0) && 
+                <Alert 
+                    heading={"Delete Multiple User"} 
+                    message={`${multipleUsersDeleted.noOfDeletedUsers} user(s) deleted successfully 
+                              ${multipleUsersDeleted.noOfUsersFailedToDelete !== 0 ? 
+                                'while' + multipleUsersDeleted.noOfUsersFailedToDelete + ' user(s) not deleted successfully. Plz try again.' : '.'}`
+                            }
+                    alertType={'success'}
+                />
+            }
+             {loading && deleteSelectedUser && 
+                <Alert 
+                     heading={"Deleting Multiple User..."} 
+                     message={'Please wait while we deleting the data from the server.'}
+                     alertType={'success'}
+                    
                 />
             }
         </div>

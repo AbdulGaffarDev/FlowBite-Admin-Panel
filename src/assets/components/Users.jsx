@@ -7,16 +7,17 @@ import UsersTable from './UsersTable';
 import Add_User_Form from './Add User Form';
 import Popup from './Popup';
 import { useDispatch, useSelector } from 'react-redux';
-import { handlePopup } from '../../redux/uiSlice'
+import { handlePopup } from '../../features/ui/uiSlice'
 
 
 const Users = () => {
   let [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
-  let [noOfSelectedUsers, setNoOfSelectedUsers] = useState(0)
-  let [animateIcon, setAnimateIcon] = useState(false)
-  let [showPopupFor, setshowPopupFor] = useState(null)
-  let [searchedValue, setSearchedValue] = useState('')
-  let [updatedData, setUpdatedData] = useState()
+  let [noOfSelectedUsers, setNoOfSelectedUsers] = useState(0);
+  let [animateIcon, setAnimateIcon] = useState(false);
+  let [showPopupFor, setshowPopupFor] = useState(null);
+  let [searchedValue, setSearchedValue] = useState('');
+  let [updatedData, setUpdatedData] = useState(null);
+  let [deleteSelectedUser, setDeleteSelectedUser] = useState(false);
   
   
 
@@ -25,18 +26,18 @@ const Users = () => {
   let dispatch = useDispatch();
   let handleCloseAddUserForm = () => setIsAddUserFormOpen(false)
   let handleShowInfo = () =>{
-        console.log("No Of users selected : " , noOfSelectedUsers)
         setshowPopupFor('showInfo')
+        dispatch(handlePopup())
   }
   let handleDeleteIconClick = () => {
-        console.log("Delete Icon clicked.")
         if(noOfSelectedUsers === 0){return}
         setshowPopupFor('deleteIcon')
+        dispatch(handlePopup())
   }
   
   let handleDeleteSelectedUsers = () => {
-    console.log("Handling delete all users")
-    dispatch(handlePopup())
+    setDeleteSelectedUser(true)
+    dispatch(handlePopup());
   }
 
   useEffect(()=>{
@@ -82,7 +83,6 @@ const Users = () => {
                   />
               </form>     
               <div className='flex gap-3 text-2xl text-gray-500 border-l-[1px] border-l-gray-300 pl-3'>
-                  {/* <span><IoIosSettings/></span> */}
                   <span 
                     className={`
                         hoverEffect
@@ -105,7 +105,6 @@ const Users = () => {
                     >
                     <IoMdInformationCircle className='text-2xl'/>
                   </span>
-                  {/* <span><BsThreeDotsVertical/></span> */}
               </div>
           </div>
           <div className='flex gap-2 mr-4'>
@@ -131,6 +130,8 @@ const Users = () => {
           debouncedSearchTerm={debouncedSearchTerm}
           setUpdatedData={setUpdatedData}
           updatedData={updatedData}
+          deleteSelectedUser={deleteSelectedUser}
+          setDeleteSelectedUser={setDeleteSelectedUser}
         />
     </div>
     <div>
@@ -141,10 +142,10 @@ const Users = () => {
                 setUpdatedData={setUpdatedData}
         />}
     </div>
-       {showPopupFor === "showInfo" && 
+       {showPopupFor === "showInfo" && noOfSelectedUsers !== 0 &&
           <Popup 
             heading={"Selected Users"} 
-            message={`You have selected ${noOfSelectedUsers} users.`}
+            message={`You have selected ${noOfSelectedUsers} user(s).`}
             showingPopupFor={showPopupFor}
           />
         }
