@@ -4,6 +4,9 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import Add_User_Form from './Add User Form';
 import Alert from './Alert';
+import Popup from './Popup';
+import { useDispatch } from 'react-redux';
+import { handlePopup } from '../../features/ui/uiSlice'
 
 function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTerm, setUpdatedData, updatedData, deleteSelectedUser, setDeleteSelectedUser}) {
     let {data, loading, error, fetchData} = useFetch()
@@ -13,11 +16,13 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
     let [dataToPrint, setDataToPrint] = useState([]);
     let [userToDelete, setUserToDelete] = useState(false)
     let [isDeleted, setisDeleted] = useState(null)
+    let [wantsToDelete, setWantsToDelete] = useState(false)
     let [multipleUsersDeleted, setMultipleUsersDeleted] = useState({
                                                             noOfUsersFailedToDelete : 0,
                                                             noOfDeletedUsers : 0,
                                                             });
-    
+    let dispatch = useDispatch();
+
     useEffect(() => {
         fetchData({url : 'https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/'})
     },[])
@@ -53,8 +58,7 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
     let handleCheckBoxChange = (e) => {
             let id = Number(e.target.id);
             let isChecked = e.target.checked;
-            isChecked ? noOfSelectedUsers++ : noOfSelectedUsers--;
-            setNoOfSelectedUsers(noOfSelectedUsers)
+            setNoOfSelectedUsers(prev => isChecked ? prev + 1 : prev - 1);
 
             setSelectedUsers(prev => ({
                 ...prev, 
@@ -76,8 +80,7 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
         setNoOfSelectedUsers(selectedUsers);
     }
 
-    let handleOpenEditForm = (e) => {
-        const id = e.target.parentNode.id;
+    let handleOpenEditForm = (id) => {
         const userData = dataToPrint.find( user => user.id === id)
         setIsEditFormOpen(true);
         setUserToEdit(userData)
@@ -89,27 +92,35 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
     }
 
     //handle single delete
-    const handleDelete = (e) => {
-        const id = e.target.parentNode.id;
-        const userData = dataToPrint.find(user=> user.id === id)
-        setUserToDelete(userData);
-        fetchData({
-            url : `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${id}`,
-            method : 'DELETE',
-        }).then(() => {
-            setDataToPrint(prev => prev.filter(user => user.id !== id));
-            setUserToDelete(null);
-            setisDeleted(true);
-        }).catch(err => {
-            console.error("Delete failed : ", err);
-            setUserToDelete(null)
-            setisDeleted(false)
-        })
-         setTimeout(() => {
-                setisDeleted(null);
-            }, 5000)
+    const handleDelete = (id) => {
+            const userData = dataToPrint.find(user=> user.id === id)
+            setUserToDelete(userData);
+            setWantsToDelete(true)
+            dispatch(handlePopup())
+            console.log("Del")
+        }
 
-    }
+     let handleDeleteSingleUser = () => {
+            console.log(userToDelete.id)
+            if(wantsToDelete){
+                fetchData({
+                    url : `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${userToDelete.id}`,
+                    method : 'DELETE',
+                }).then(() => {
+                    setDataToPrint(prev => prev.filter(user => user.id !== userToDelete.id));
+                    setUserToDelete(null);
+                    setisDeleted(true);
+                }).catch(err => {
+                    console.error("Delete failed : ", err);
+                    setUserToDelete(null)
+                    setisDeleted(false)
+                })
+                setTimeout(() => {
+                        setisDeleted(null);
+                    }, 5000)
+                setWantsToDelete(false);
+            }
+     }
 
     //handle multiple delete
     useEffect(()=> {
@@ -171,7 +182,7 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
             <table className='min-w-max w-full'>
                 <thead>
                     <tr className='font-medium text-[14px] bg-gray-200 border-1 border-gray-300'>
-                        <td className='px-2 py-3'>
+                        <th className='px-2 py-3'>
                             <form action={'JavaScript:void(0)'}>
                                 <input type="checkbox" name="selectAllUsers" id="selectAllUsers" 
                                         onChange = {handleSelectAll}
@@ -181,7 +192,7 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                                         }
                                 />
                             </form>
-                        </td>
+                        </th>
                         <th className='font-[400] p-4 text-left'>NAME</th>
                         <th className='font-[400] p-4 text-left'>BIOGRAPHY</th>
                         <th className='font-[400] p-4 text-left'>POSITION</th>
@@ -236,14 +247,14 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                         >
                             <button 
                               className='common-btn-style blue-btn'
-                              onClick={handleOpenEditForm}
+                              onClick={() => handleOpenEditForm(user.id)}
                             >
                                 <FaEdit/>
                                 Update
                             </button>
                             <button 
                                 className='common-btn-style red-btn'
-                                onClick={handleDelete}
+                                onClick={() => handleDelete(user.id)}
                                 >
                                 <RiDeleteBin6Fill/>
                                 Delete
@@ -303,6 +314,17 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                      message={'Please wait while we deleting the data from the server.'}
                      alertType={'success'}
                     
+                />
+            }
+            {console.log(wantsToDelete)}
+            {wantsToDelete && 
+                <Popup 
+                    handleDeleteSelectedUsers = {handleDeleteSingleUser}
+                    heading={"Delete User"} 
+                    message={`Are you sure you want to delete selected user?`}
+                    btn1Text={"Delete"}
+                    btn2Text={"Cancel"}
+                    showingPopupFor={'deleteIcon'}
                 />
             }
         </div>
