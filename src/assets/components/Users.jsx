@@ -11,13 +11,14 @@ import { handlePopup } from '../../features/ui/uiSlice'
 
 
 const Users = () => {
-  let [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
-  let [noOfSelectedUsers, setNoOfSelectedUsers] = useState(0);
-  let [animateIcon, setAnimateIcon] = useState(false);
-  let [showPopupFor, setshowPopupFor] = useState(null);
-  let [searchedValue, setSearchedValue] = useState('');
-  let [updatedData, setUpdatedData] = useState(null);
-  let [deleteSelectedUser, setDeleteSelectedUser] = useState(false);
+  const [isAddUserFormOpen, setIsAddUserFormOpen] = useState(false);
+  const [noOfSelectedUsers, setNoOfSelectedUsers] = useState(0);
+  const [animateIcon, setAnimateIcon] = useState(false);
+  const [showPopupFor, setshowPopupFor] = useState(null);
+  const [searchedValue, setSearchedValue] = useState('');
+  const [deleteSelectedUser, setDeleteSelectedUser] = useState(false);
+  const [dataToPrint, setDataToPrint] = useState([]);
+  
   
   
 
@@ -126,12 +127,11 @@ const Users = () => {
     <div className='mt-3 ml-68 overflow-x-auto'>
       <UsersTable 
           setNoOfSelectedUsers={setNoOfSelectedUsers} 
-          noOfSelectedUsers={noOfSelectedUsers} 
           debouncedSearchTerm={debouncedSearchTerm}
-          setUpdatedData={setUpdatedData}
-          updatedData={updatedData}
           deleteSelectedUser={deleteSelectedUser}
           setDeleteSelectedUser={setDeleteSelectedUser}
+          setDataToPrint={setDataToPrint}
+          dataToPrint={dataToPrint}
         />
     </div>
     <div>
@@ -139,7 +139,7 @@ const Users = () => {
               <Add_User_Form 
                 handleClose={handleCloseAddUserForm} 
                 operation={'addingUser'}
-                setUpdatedData={setUpdatedData}
+                setDataToPrint={setDataToPrint}
         />}
     </div>
        {showPopupFor === "showInfo" && noOfSelectedUsers !== 0 &&

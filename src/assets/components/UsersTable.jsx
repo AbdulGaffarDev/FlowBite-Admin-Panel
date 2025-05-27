@@ -8,16 +8,15 @@ import Popup from './Popup';
 import { useDispatch } from 'react-redux';
 import { handlePopup } from '../../features/ui/uiSlice'
 
-function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTerm, setUpdatedData, updatedData, deleteSelectedUser, setDeleteSelectedUser}) {
-    let {data, loading, error, fetchData} = useFetch()
-    let [selectedUsers, setSelectedUsers] = useState({});
-    let [userToEdit, setUserToEdit] = useState()
-    let [isEditFormOpen, setIsEditFormOpen] = useState(false);
-    let [dataToPrint, setDataToPrint] = useState([]);
-    let [userToDelete, setUserToDelete] = useState(false)
-    let [isDeleted, setisDeleted] = useState(null)
-    let [wantsToDelete, setWantsToDelete] = useState(false)
-    let [multipleUsersDeleted, setMultipleUsersDeleted] = useState({
+function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUser, setDeleteSelectedUser, setDataToPrint, dataToPrint}) {
+    const {data, loading, error, fetchData} = useFetch()
+    const [selectedUsers, setSelectedUsers] = useState({});
+    const [userToEdit, setUserToEdit] = useState()
+    const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(false)
+    const [isDeleted, setisDeleted] = useState(null)
+    const [wantsToDelete, setWantsToDelete] = useState(false)
+    const [multipleUsersDeleted, setMultipleUsersDeleted] = useState({
                                                             noOfUsersFailedToDelete : 0,
                                                             noOfDeletedUsers : 0,
                                                             });
@@ -31,18 +30,9 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
         setDataToPrint(data); //Update the data in table
     }, [data])
 
-    useEffect(() =>{
-        if(updatedData){
-            setDataToPrint(prev => 
-                prev.map(user => (user.id === updatedData.id ? updatedData : user))
-            )
-        }
-    },[updatedData]);
-   
-
     useEffect(() => {
         let filteredUsers = [];
-        if(!debouncedSearchTerm.trim()){
+        if(!debouncedSearchTerm?.trim()){
             setDataToPrint(data);
             return;
         }
@@ -97,11 +87,9 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
             setUserToDelete(userData);
             setWantsToDelete(true)
             dispatch(handlePopup())
-            console.log("Del")
         }
 
      let handleDeleteSingleUser = () => {
-            console.log(userToDelete.id)
             if(wantsToDelete){
                 fetchData({
                     url : `https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/${userToDelete.id}`,
@@ -274,7 +262,7 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                             operation = 'editing' 
                             userObj = {userToEdit} 
                             handleClose = {handleCloseEditForm}
-                            setUpdatedData = {setUpdatedData} 
+                            setDataToPrint = {setDataToPrint}
                         />
             }
             {userToDelete && loading && 
@@ -316,7 +304,6 @@ function UsersTable({setNoOfSelectedUsers, noOfSelectedUsers, debouncedSearchTer
                     
                 />
             }
-            {console.log(wantsToDelete)}
             {wantsToDelete && 
                 <Popup 
                     handleDeleteSelectedUsers = {handleDeleteSingleUser}

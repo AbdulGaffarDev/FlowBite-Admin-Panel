@@ -5,7 +5,10 @@ function useFetch(  ) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null)
-    
+    const [updatedUser, setUpdatedUser] = useState(null)
+    const [newUser, setNewUser] = useState(null)
+    const [deletedUser, setDeletedUser] = useState(null)
+
         const fetchData = async ({url, method = 'GET', body = null}) => {
             setLoading(true);
             setError(null);
@@ -21,11 +24,13 @@ function useFetch(  ) {
                 }
                 const result = await response.json();
                 if(method === 'GET'){
-                    console.log(result)
                     setData(result)
                 }
                 else if(method === 'PUT' || method === 'PATCH'){
-                    //handle edited user to show on the page
+                    setUpdatedUser(result);;
+                }
+                else if(method ==="POST"){
+                    setNewUser(result);
                 }
             }catch(err){
                 console.log(err)
@@ -35,7 +40,7 @@ function useFetch(  ) {
             }
         }
 
-  return ({data, loading, error, fetchData})
+  return ({data, newUser, updatedUser, loading, error, fetchData})
 }
 
 export default useFetch;

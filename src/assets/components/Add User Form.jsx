@@ -6,11 +6,11 @@ import useFetch from '../hooks/useFetch';
 import Alert from './Alert';
 
 
-function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
+function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
     let isUserObjFound = ((userObj != null && userObj != undefined))
     let [isValueUpdated, setIsValueUpdated] = useState(false)
     let [operationStatus, setOperationStatus] = useState(null)
-    let {data, loading, error, fetchData} = useFetch()
+    let {data, newUser, updatedUser, loading, error, fetchData} = useFetch()
     
     const callFetchHook = async({url, method, values}) => {
          let addingPassword;
@@ -30,7 +30,7 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                 password : addingPassword, 
             }
         if(!isUserObjFound){
-            let randomNumber = 88;
+            let randomNumber = Math.floor(1+Math.random()*100)
             let gender = 'men'; //men or women
             let country = 'Pakistan'
             updatedData.status = 'Offline'
@@ -41,13 +41,10 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
                 .then(() => {
                     if(method === 'POST'){
                         setOperationStatus('added')
-                    }
+                     }
                     else{
                         setOperationStatus('updated');
                     }
-                    //API is responding with null when user is updated or added. 
-                    // If API respond with data then whole data on the page will be updated. Logic for this is written.
-                    setUpdatedData(data); //Send data to the parent component
                 })
                 .catch(err => {
                     console.log("Something wents wrong")
@@ -91,11 +88,11 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
         //Set isValueUpdated true if following conditions match and userObjFound otherwise set IsValueUpdated true for add user
         if(isUserObjFound){ 
             setIsValueUpdated(
-                   userObj.firstName !== values.firstName
-                || userObj.lastName !== values.lastName
-                || userObj.bio !== values.bio
-                || userObj.position !== values.position
-                || userObj.email !== values.email
+                   userObj.firstName !== values.firstName.trim()
+                || userObj.lastName !== values.lastName.trim()
+                || userObj.bio !== values.bio.trim()
+                || userObj.position !== values.position.trim()
+                || userObj.email !== values.email.trim()
                 || values.currentPassword !== '' 
             )
         }
@@ -103,13 +100,30 @@ function Add_User_Form({userObj, operation, handleClose, setUpdatedData}) {
             setIsValueUpdated(true)
         }
     },[values, userObj])
+
+     useEffect(() => {
+            if(updatedUser){
+                setDataToPrint(prevData => 
+                            prevData.map(user => 
+                                user.id === updatedUser.id ? updatedUser : user
+                            ))
+            }
+        }, [updatedUser])
+    
+        useEffect(() => {
+            if(newUser){
+                setDataToPrint(prevData => [...prevData, newUser])
+            }
+        }, [newUser])
+    
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center flex-col px-5'>
         <div 
             className='sm:min-w-[200px] sm:max-w-[500px] 
                        md:min-w-[350px] md:max-w-[750px] 
                        lg:min-w-[650px] lg:max-w-[900px] 
-                       h-max  bg-white text-black
+                       bg-white text-black
+                       max-h-[85vh] overflow-auto 
                        rounded-lg shadow-2xl'
         >
             <div className='flex justify-between pt-3 pb-4 px-5 font-medium  text-gray-600  border-b-gray-300 border-b-[1px]'>
