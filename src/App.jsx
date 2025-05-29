@@ -1,4 +1,4 @@
-import Add_Product_Form from "./assets/components/Add Product Form";
+import ProductForm from "./assets/components/ProductForm";
 import Add_User_Form from "./assets/components/Add User Form";
 import Navbar from "./assets/components/navbar"
 import Sidebar from "./assets/components/Sidebar";
@@ -12,12 +12,9 @@ function App() {
     <>
       <div className="flex flex-col w-[100%]  mt-19 overflow-x-hidden">
         <Navbar />
-        {/* <div className="flex h-screen "> */}
           <Sidebar />
-          <Users />
-          {/* <UsersTable/> */}
-        {/* </div> */}
-          {/* <Add_Product_Form/> */}
+          {/* <Users /> */}
+          <ProductForm/>
 
           
 

@@ -6,7 +6,7 @@ const uiSlice = createSlice({
         theme : 'light',
         isPopupOpen : false,
         isAlertDisplaying : false,
-        // isEditFormOpen : false,
+        isProductFormOpen : false,
     },
     reducers : {
         toggleTheme : (state) => {
@@ -17,6 +17,9 @@ const uiSlice = createSlice({
         },
         handleAlert : (state) => {
             state.isAlertDisplaying === !state.isAlertDisplaying;
+        },
+        handleProductForm : (state) => {
+            state.isProductFormOpen === !state.isProductFormOpen;
         },
     }
 })
