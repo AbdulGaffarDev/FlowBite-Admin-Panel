@@ -1,10 +1,8 @@
 import ProductForm from "./assets/components/ProductForm";
-import Add_User_Form from "./assets/components/Add User Form";
 import Navbar from "./assets/components/navbar"
 import Sidebar from "./assets/components/Sidebar";
 import Users from "./assets/components/Users";
-import UsersTable from "./assets/components/UsersTable";
-
+import Products from "./assets/components/Products";
 
 function App() {
 
@@ -14,7 +12,7 @@ function App() {
         <Navbar />
           <Sidebar />
           {/* <Users /> */}
-          <ProductForm/>
+          <Products/>
 
           
 
