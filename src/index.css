@@ -61,3 +61,24 @@
            hover:bg-gray-100
            hover:text-black
 }
+
+/* SideBar Styling */
+.sidebarContainer{
+    @apply w-64 
+           h-screen 
+           fixed 
+           left-0 
+           drop-shadow-black 
+           z-10 
+           shadow 
+           p-4 
+           space-y-2 
+           overflow-auto
+}
+.sidebarElements{
+    @apply flex items-center gap-2 text-[18px] rounded-md cursor-pointer p-2 
+}
+
+ .sidebarNestedElements{
+    @apply p-2 pl-8  rounded-md cursor-pointer
+ }
