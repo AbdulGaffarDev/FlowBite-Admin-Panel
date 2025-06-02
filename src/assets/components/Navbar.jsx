@@ -3,31 +3,50 @@ import { FaSearch } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
 import { AiFillAppstore } from "react-icons/ai";
 import { IoMoonSharp } from "react-icons/io5";
+import { toggleTheme } from '../../features/ui/uiSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 function Navbar() {
+  let themeState = useSelector((state) => state.ui.theme);
+  console.log(themeState)
+  const dispatch = useDispatch()
   return (
     <>
-    <div className='drop-shadow-black bg-white w-full fixed top-0 z-20 min-h-12 border-y-[1px] border-gray-300 flex items-center justify-between p-3'>
+    <div className={`w-full fixed top-0 z-20 min-h-12 border-y-[1px] flex items-center justify-between p-3
+                    ${themeState === 'light' ? 'navContainer-light' : 'navContainer-dark'}
+      `}>
         <div className='flex'>
           <div className='flex items-center pl-2'>
             <img src='./logo.svg' alt="Logo" className='p-2'/>
-            <h1 className='font-medium text-2xl p-2'>Flowbite</h1>
+            <h1 className={`logoStyle 
+                   ${themeState === 'light' ? 'text-black' : 'text-white'}
+              `}>Flowbite</h1>
           </div>
-          <div className='flex items-center ml-17 m-0 '>
+          <div className='flex items-center ml-17 m-0 relative'>
             <form action='Javascript:void(0)' className='flex'>
-              <input type="search" name="search" placeholder='Search' className='border-1 border-gray-400 rounded p-1 min-h-8 w-70' />
-              <button type="submit" className='border-1 border-gray-400 rounded min-h-8 px-2 py-1 ml-1 box-border'><FaSearch /></button>
+              <input type="search" name="search" placeholder='Search' 
+                     className={`border-1 border-gray-400 rounded-2xl p-1 pl-10 pr-3 min-h-8 w-70
+                                ${themeState === 'light' ? 'text-black' : 'text-white'}
+                     `} />
+              <button type="submit" 
+                      className={`absolute flex top-4 left-3
+                                 ${themeState === 'light' ? 'text-black' : 'text-white'}
+                      `}>
+                        <FaSearch />
+              </button>
             </form>
           </div>
         </div>
         <div className='flex gap-[4px]'>
-          <div className='rounded box-border text-2xl p-2 cursor-pointer hover:bg-gray-100'>
+          <div className={`navIcon ${themeState === 'light' ? 'text-black' : 'text-white'}`}>
             <IoIosNotifications  />
           </div>
-          <div className='rounded box-border text-2xl p-2 cursor-pointer hover:bg-gray-100'>
+          <div className={`navIcon ${themeState === 'light' ? 'text-black' : 'text-white'}`}>
             <AiFillAppstore />
           </div>
-          <div className='rounded box-border text-2xl p-2 cursor-pointer hover:bg-gray-100'>
+          <div className={`navIcon ${themeState === 'light' ? 'text-black' : 'text-white'}`}
+               onClick={() => dispatch(toggleTheme())}
+          >
             <IoMoonSharp />
           </div>
         </div>

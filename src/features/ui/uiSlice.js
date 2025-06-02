@@ -16,14 +16,14 @@ const uiSlice = createSlice({
             state.isPopupOpen = !state.isPopupOpen;
         },
         handleAlert : (state) => {
-            state.isAlertDisplaying === !state.isAlertDisplaying;
+            state.isAlertDisplaying = !state.isAlertDisplaying;
         },
         handleProductForm : (state) => {
-            state.isProductFormOpen === !state.isProductFormOpen;
+            state.isProductFormOpen = !state.isProductFormOpen;
         },
     }
 })
 
-export const {toggleTheme, handlePopup, handleAlert} = uiSlice.actions;
+export const {toggleTheme, handlePopup, handleAlert, handleProductForm} = uiSlice.actions;
 
 export default uiSlice.reducer;

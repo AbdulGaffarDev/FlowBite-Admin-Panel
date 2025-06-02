@@ -32,3 +32,32 @@
            cursor-pointer
            hover:bg-gray-100
 }
+
+
+/* Navbar styling */
+
+.navContainer-light{
+    @apply drop-shadow-black 
+           bg-white 
+           border-gray-300
+}
+.navContainer-dark{
+    @apply drop-shadow-white 
+           bg-blue-950 
+           border-gray-300
+
+}
+.logoStyle{
+    @apply font-medium
+           text-2xl 
+           p-2
+}
+.navIcon{
+    @apply rounded 
+           box-border 
+           text-2xl 
+           p-2 
+           cursor-pointer 
+           hover:bg-gray-100
+           hover:text-black
+}

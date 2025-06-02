@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux'; 
-import handleProductForm from '../../features/ui/uiSlice'
+import { handleProductForm } from '../../features/ui/uiSlice'
 
 
 function ProductForm() {
     
   const dispatch = useDispatch();
 
+  const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
+  console.log("Product form open  ")
+//   if (!isProductFormOpen) return null;
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center flex-col px-5'>
         <div 

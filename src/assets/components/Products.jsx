@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {FaHome, FaAngleRight } from "react-icons/fa";
 import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
 import ProductsTable from './ProductsTable';
 import ProductForm from './ProductForm';
-import handleProductForm from '../../features/ui/uiSlice'
+import { handleProductForm } from '../../features/ui/uiSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
 function Products() {
   const dispatch = useDispatch()
+  const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
+  console.log(isProductFormOpen)
   return (
      <div className='flex flex-col gap-4'>
         <div className='mt-3 ml-68 w-265 '>
@@ -67,6 +69,7 @@ function Products() {
                     onClick={() => {
                       console.log("Working")
                       dispatch(handleProductForm());
+                      console.log(isProductFormOpen)
                     }}
                   >
                       <IoIosAdd className='text-[#ffffff] text-2xl' />
@@ -83,7 +86,7 @@ function Products() {
         <div className='mt-3 ml-68 overflow-x-auto'>
             <ProductsTable />
         </div>
-        {useSelector(state => state.ui.isProductFormOpen) && 
+        {isProductFormOpen && 
          <ProductForm />
         }
         </div>
