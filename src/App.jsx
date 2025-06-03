@@ -11,8 +11,8 @@ function App() {
       <div className="flex flex-col w-[100%]  mt-19 overflow-x-hidden">
         <Navbar />
           <Sidebar />
-          {/* <Users /> */}
-          <Products/>
+          <Users />
+          {/* <Products/> */}
 
           
 

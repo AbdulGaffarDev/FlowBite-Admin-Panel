@@ -2,7 +2,7 @@ import React from 'react';
 import { FaSearch } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
 import { AiFillAppstore } from "react-icons/ai";
-import { IoMoonSharp } from "react-icons/io5";
+import { IoMoonSharp, IoSunny  } from "react-icons/io5";
 import { toggleTheme } from '../../features/ui/uiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -26,7 +26,7 @@ function Navbar() {
             <form action='Javascript:void(0)' className='flex'>
               <input type="search" name="search" placeholder='Search' 
                      className={`border-1 border-gray-400 rounded-2xl p-1 pl-10 pr-3 min-h-8 w-70
-                                ${themeState === 'light' ? 'text-black' : 'text-white'}
+                                ${themeState === 'light' ? 'text-black placeholder-gray-400' : 'text-white'}
                      `} />
               <button type="submit" 
                       className={`absolute flex top-4 left-3
@@ -47,7 +47,7 @@ function Navbar() {
           <div className={`navIcon ${themeState === 'light' ? 'text-black' : 'text-white'}`}
                onClick={() => dispatch(toggleTheme())}
           >
-            <IoMoonSharp />
+            {themeState === 'light' ?<IoMoonSharp /> : <IoSunny />}
           </div>
         </div>
     </div>

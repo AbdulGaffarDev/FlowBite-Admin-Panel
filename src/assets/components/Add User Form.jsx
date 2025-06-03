@@ -4,9 +4,11 @@ import {useFormik} from 'formik'
 import UserFormSchema from '../schemas/UserFormSchema'
 import useFetch from '../hooks/useFetch';
 import Alert from './Alert';
+import { useSelector } from 'react-redux';
 
 
 function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
+    const themeState = useSelector(state => state.ui.theme)
     let isUserObjFound = ((userObj != null && userObj != undefined))
     let [isValueUpdated, setIsValueUpdated] = useState(false)
     let [operationStatus, setOperationStatus] = useState(null)
@@ -117,24 +119,21 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
         }, [newUser])
     
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center flex-col px-5'>
+    <div className='userFormMainContainer'>
         <div 
-            className='sm:min-w-[200px] sm:max-w-[500px] 
-                       md:min-w-[350px] md:max-w-[750px] 
-                       lg:min-w-[650px] lg:max-w-[900px] 
-                       bg-white text-black
-                       max-h-[85vh] overflow-auto 
-                       rounded-lg shadow-2xl'
+            className={`userFormContainer
+                        ${themeState === 'light' ? 'bg-white text-black' : 'bg-blue-950 text-white'}
+                `}
         >
             <div className='flex justify-between pt-3 pb-4 px-5 font-medium  text-gray-600  border-b-gray-300 border-b-[1px]'>
-                  <h1 className='text-[20px]'>
+                  <h1 className={`${themeState==='light' ? 'text-black' : 'text-white'} text-[20px]`}>
                     {isUserObjFound ? "Edit user" : "Add new user"}
                   </h1>
                   <button 
-                    className='text-2xl box-border hoverEffect'
+                    className={`closeIcon  ${themeState==='light'? 'hover:bg-gray-100':'hover:bg-blue-900'}`}
                     onClick={handleClose}
                     >
-                    <IoClose/>
+                    <IoClose className={`${themeState==='light' ? 'text-black' : 'text-white'}`}/>
                   </button>
             </div>
             <div className='py-5 px-5 mb-3 border-b-[1px] border-b-gray-300'>
@@ -149,14 +148,14 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                                 value={values.firstName }
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.firstName && touched.firstName && <p className='text-red-500'>{errors.firstName}</p>}
                         </div>
                         <div className='w-[50%]'>
                             <label>Last Name </label><br />
                             <input type="text" placeholder='Last Name'  name='lastName'
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full  bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                 value={values.lastName }
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -168,7 +167,7 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                         <div className='w-[50%]'>
                             <label>Email *</label><br />
                             <input type="email" placeholder='example@company.com' name='email'
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                 value={values.email }
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -178,7 +177,7 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                         <div className='w-[50%]'>
                             <label>Position *</label><br />
                             <input type="text" placeholder='e.g. React developer' name='position'
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                 value={values.position }
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -193,7 +192,7 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                             <div className='w-[50%]'>
                                 <label>Current Password</label><br />
                                 <input type="password" placeholder='*******' name='currentPassword'
-                                    className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                    className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.currentPassword}
@@ -203,7 +202,7 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                             <div className='w-[50%]'>
                                 <label>New Password</label><br />
                                 <input type="password" placeholder='*******' name='newPassword'
-                                    className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                    className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                     onChange={handleChange}
                                     value={values.newPassword}
                                     onBlur={handleBlur}
@@ -216,7 +215,7 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
                         <div>
                             <label>Biography </label><br />
                             <textarea name="bio" 
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                                 placeholder='Full stack developer. Open source contributor.'
                                 rows={3} 
                                 value={values.bio }

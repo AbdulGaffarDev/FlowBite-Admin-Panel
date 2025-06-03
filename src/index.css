@@ -82,3 +82,28 @@
  .sidebarNestedElements{
     @apply p-2 pl-8  rounded-md cursor-pointer
  }
+
+ /* User Form  STyling*/
+
+ .userFormContainer{
+    @apply sm:min-w-[200px] sm:max-w-[500px] 
+           md:min-w-[350px] md:max-w-[750px] 
+           lg:min-w-[650px] lg:max-w-[900px] 
+           max-h-[85vh] overflow-auto 
+           rounded-lg shadow-2xl
+ }
+
+ .userFormMainContainer{
+    @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5 shadow-lg shadow-gray-300
+ }
+ .closeIcon{
+    @apply text-2xl box-border rounded-sm p-2
+           cursor-pointer
+ }
+ .inputFields-dark {
+  @apply border border-gray-200 rounded-sm py-2 px-3 w-full mt-2 bg-gray-800 ;
+}
+
+.inputField-light {
+  @apply border border-gray-400 rounded-sm py-2 px-3 w-full mt-2 bg-gray-50;
+}
