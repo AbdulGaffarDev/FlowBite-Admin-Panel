@@ -12,6 +12,9 @@ const uiSlice = createSlice({
         toggleTheme : (state) => {
             state.theme = (state.theme === 'light' ? 'dark' : 'light')
         },
+        setTheme : (state, actions) => {
+            state.theme = actions.payload
+        },
         handlePopup : (state) => {
             state.isPopupOpen = !state.isPopupOpen;
         },
@@ -24,6 +27,6 @@ const uiSlice = createSlice({
     }
 })
 
-export const {toggleTheme, handlePopup, handleAlert, handleProductForm} = uiSlice.actions;
+export const {toggleTheme, setTheme, handlePopup, handleAlert, handleProductForm} = uiSlice.actions;
 
 export default uiSlice.reducer;

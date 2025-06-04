@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
 import { AiFillAppstore } from "react-icons/ai";
 import { IoMoonSharp, IoSunny  } from "react-icons/io5";
-import { toggleTheme } from '../../features/ui/uiSlice';
+import { toggleTheme, setTheme } from '../../features/ui/uiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 function Navbar() {
   let themeState = useSelector((state) => state.ui.theme);
-  console.log(themeState)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+     const localThemeState = JSON.parse(localStorage.getItem('themeState'))
+     if(localThemeState===null){
+      dispatch(setTheme('light'))
+     }else{
+      dispatch(setTheme(localThemeState.themeState))
+     }
+  }, [])
+
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
+    localStorage.setItem('themeState',JSON.stringify({themeState : (themeState === 'light' ? 'dark' : 'light')}))
+  }
   return (
     <>
     <div className={`w-full fixed top-0 z-20 min-h-12 border-y-[1px] flex items-center justify-between p-3
@@ -45,7 +58,7 @@ function Navbar() {
             <AiFillAppstore />
           </div>
           <div className={`navIcon ${themeState === 'light' ? 'text-black' : 'text-white'}`}
-               onClick={() => dispatch(toggleTheme())}
+               onClick={handleToggleTheme}
           >
             {themeState === 'light' ?<IoMoonSharp /> : <IoSunny />}
           </div>

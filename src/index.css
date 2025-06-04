@@ -94,7 +94,7 @@
  }
 
  .userFormMainContainer{
-    @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5 shadow-lg shadow-gray-300
+    @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5 shadow-lg shadow-gray-300 
  }
  .closeIcon{
     @apply text-2xl box-border rounded-sm p-2
