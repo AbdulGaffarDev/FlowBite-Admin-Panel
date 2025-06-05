@@ -12,6 +12,7 @@ import { GoTriangleRight, GoTriangleDown } from "react-icons/go";
 
 function Sidebar() {
     const themeState = useSelector(state => state.ui.theme)
+    const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
     const [activeItem,setActiveItem] = useState(null);
     
     const toggleItem = (label) => {
@@ -19,7 +20,10 @@ function Sidebar() {
     }
   return (
     <div>
-    <div className={`sidebarContainer ${themeState==='light'? 'bg-white':'bg-blue-950'} `} >
+    <div className={`sidebarContainer 
+                ${themeState==='light'? 'bg-white':'bg-blue-950'} 
+                ${isAnyModalOpen ? 'blurred' : ''}
+                `} >
         
         <div className={`sidebarElements 
                         ${themeState==='light'? 'hover:bg-gray-100':'hover:bg-blue-900'}

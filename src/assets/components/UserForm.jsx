@@ -4,16 +4,17 @@ import {useFormik} from 'formik'
 import UserFormSchema from '../schemas/UserFormSchema'
 import useFetch from '../hooks/useFetch';
 import Alert from './Alert';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 
-function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
+function UserForm({userObj, operation, handleClose, setDataToPrint}) {
     const themeState = useSelector(state => state.ui.theme)
     let isUserObjFound = ((userObj != null && userObj != undefined))
     let [isValueUpdated, setIsValueUpdated] = useState(false)
     let [operationStatus, setOperationStatus] = useState(null)
     let {data, newUser, updatedUser, loading, error, fetchData} = useFetch()
-    
+    const dispatch = useDispatch()
+
     const callFetchHook = async({url, method, values}) => {
          let addingPassword;
          if(isUserObjFound){
@@ -119,9 +120,9 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
         }, [newUser])
     
   return (
-    <div className='userFormMainContainer'>
+    <div className='formMainContainer'>
         <div 
-            className={`userFormContainer
+            className={`formContainer
                         ${themeState === 'light' ? 'bg-white text-black' : 'bg-blue-950 text-white'}
                 `}
         >
@@ -283,4 +284,4 @@ function Add_User_Form({userObj, operation, handleClose, setDataToPrint}) {
   )
 }
 
-export default Add_User_Form;
+export default UserForm;

@@ -8,7 +8,7 @@ function ProductForm() {
   const [data, setData]  = useState(null)
   const [preview, setPreview] = useState(null)
   const dispatch = useDispatch();
-
+  const themeState = useSelector(state => state.ui.theme);
   const {register, handleSubmit, watch, 
         formState : {errors}, 
         } = useForm()
@@ -22,24 +22,21 @@ function ProductForm() {
   console.log(errors)
   const purchasePrice = watch('purchasePrice')
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center flex-col px-5'>
+    <div className='formMainContainer'>
         <div 
-            className='sm:min-w-[200px] sm:max-w-[500px] 
-                       md:min-w-[350px] md:max-w-[750px] 
-                       lg:min-w-[650px] lg:max-w-[900px] 
-                       bg-white text-black
-                       max-h-[85vh] overflow-auto 
-                       rounded-lg shadow-2xl'
+            className={`formContainer
+                        ${themeState === 'light' ? 'bg-white text-black' : 'bg-blue-950 text-white'}
+                `}
         >
             <div className='flex justify-between pt-3 pb-4 px-5 font-medium  text-gray-600  border-b-gray-300 border-b-[1px]'>
-                  <h1 className='text-[20px]'>
+                  <h1 className={`${themeState==='light' ? 'text-black' : 'text-white'} text-[20px]`}>
                      Add new product
                   </h1>
                   <button 
-                    className='text-2xl box-border hoverEffect'
+                    className={`closeIcon  ${themeState==='light'? 'hover:bg-gray-100':'hover:bg-blue-900'}`}
                     onClick={() => dispatch(handleProductForm())}
                     >
-                    <IoClose/>
+                    <IoClose className={`${themeState==='light' ? 'text-black' : 'text-white'}`}/>
                   </button>
             </div>
             <div className='py-5 px-5 mb-3 border-b-[1px] border-b-gray-300'>
@@ -58,7 +55,7 @@ function ProductForm() {
                                         maxLength : {value : 15 , message : "Enter less then 16 characters"}
                                     }
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.productName && 
                             <p className='text-red-500 text-[15px]'>
@@ -83,7 +80,7 @@ function ProductForm() {
                                     }
                                     }
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.purchasePrice && 
                             <p className='text-red-500 text-[15px]'>
@@ -110,7 +107,7 @@ function ProductForm() {
                                     }
                                     
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.sellPrice && 
                             <p className='text-red-500 text-[15px]'>
@@ -118,7 +115,7 @@ function ProductForm() {
                             </p>}
                         </div>
                     </div>
-                    <div className='md:flex lg:flex xl:flex gap-4 mt-4'>
+                    <div className='md:flex gap-4 mt-4'>
                         <div className='w-[33%]'>
                             <label>Stock *</label><br />
                             <input type="number" placeholder='Stock' name='purchasePrice'
@@ -128,7 +125,7 @@ function ProductForm() {
                                         message : "Stock is required"
                                     }}
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.stock && 
                             <p className='text-red-500 text-[15px]'>
@@ -139,7 +136,7 @@ function ProductForm() {
                             <label>Brand</label><br />
                             <input type="number" placeholder='Brand' name='brand'
                                 {...register('brand')}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                         </div>
                         <div className='w-[33%]'>
@@ -160,7 +157,7 @@ function ProductForm() {
                                         }
                                     },
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full  bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.barcode && 
                             <p className='text-red-500 text-[15px]'>
@@ -181,7 +178,7 @@ function ProductForm() {
                                         message : 'Product image is required'
                                     }},
                                 )}
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}
                             />
                             {errors.productImage && 
                             <p className='text-red-500 text-[15px]'>
@@ -193,7 +190,7 @@ function ProductForm() {
                         <div>
                             <label>Description </label><br />
                             <textarea name="description" 
-                                className='border-[1px] border-gray-400 rounded-sm py-2 px-3 w-full bg-gray-50 mt-2'
+                                className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}    
                                 placeholder='Description'
                                 rows={3}
                                 {...register('description')}

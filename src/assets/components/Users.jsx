@@ -4,7 +4,7 @@ import {FaHome, FaAngleRight } from "react-icons/fa";
 import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
 import UsersTable from './UsersTable';
-import Add_User_Form from './Add User Form';
+import UserForm from './UserForm';
 import Popup from './Popup';
 import { useDispatch, useSelector } from 'react-redux';
 import { handlePopup } from '../../features/ui/uiSlice'
@@ -19,9 +19,7 @@ const Users = () => {
   const [deleteSelectedUser, setDeleteSelectedUser] = useState(false);
   const [dataToPrint, setDataToPrint] = useState([]);
   
-  
-  
-
+  const themeState = useSelector(state => state.ui.theme);
   const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
 
   let dispatch = useDispatch();
@@ -136,7 +134,7 @@ const Users = () => {
     </div>
     <div>
       {isAddUserFormOpen && 
-              <Add_User_Form 
+              <UserForm 
                 handleClose={handleCloseAddUserForm} 
                 operation={'addingUser'}
                 setDataToPrint={setDataToPrint}

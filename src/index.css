@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+.blurred{
+    @apply blur-[2px] 
+           pointer-events-none 
+           select-none
+}
 .common-btn-style{
      @apply  flex 
             items-center 
@@ -83,9 +88,9 @@
     @apply p-2 pl-8  rounded-md cursor-pointer
  }
 
- /* User Form  STyling*/
+ /* User Form & Product form STyling*/
 
- .userFormContainer{
+.formContainer{
     @apply sm:min-w-[200px] sm:max-w-[500px] 
            md:min-w-[350px] md:max-w-[750px] 
            lg:min-w-[650px] lg:max-w-[900px] 
@@ -93,7 +98,7 @@
            rounded-lg shadow-2xl
  }
 
- .userFormMainContainer{
+ .formMainContainer{
     @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5 shadow-lg shadow-gray-300 
  }
  .closeIcon{
@@ -104,6 +109,6 @@
   @apply border border-gray-200 rounded-sm py-2 px-3 w-full mt-2 bg-gray-800 ;
 }
 
-.inputField-light {
+.inputFields-light {
   @apply border border-gray-400 rounded-sm py-2 px-3 w-full mt-2 bg-gray-50;
 }

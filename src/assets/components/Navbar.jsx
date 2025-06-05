@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 function Navbar() {
   let themeState = useSelector((state) => state.ui.theme);
   const dispatch = useDispatch()
+  const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+
 
   useEffect(() => {
      const localThemeState = JSON.parse(localStorage.getItem('themeState'))
@@ -27,6 +29,7 @@ function Navbar() {
     <>
     <div className={`w-full fixed top-0 z-20 min-h-12 border-y-[1px] flex items-center justify-between p-3
                     ${themeState === 'light' ? 'navContainer-light' : 'navContainer-dark'}
+                    ${isAnyModalOpen ? 'blurred' : ''}
       `}>
         <div className='flex'>
           <div className='flex items-center pl-2'>
@@ -39,7 +42,7 @@ function Navbar() {
             <form action='Javascript:void(0)' className='flex'>
               <input type="search" name="search" placeholder='Search' 
                      className={`border-1 border-gray-400 rounded-2xl p-1 pl-10 pr-3 min-h-8 w-70
-                                ${themeState === 'light' ? 'text-black placeholder-gray-400' : 'text-white'}
+                                ${themeState === 'light' ? 'text-black placeholder-gray-400' : 'text-white shadow-sm shadow-gray-100'}
                      `} />
               <button type="submit" 
                       className={`absolute flex top-4 left-3

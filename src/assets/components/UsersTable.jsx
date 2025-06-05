@@ -2,10 +2,10 @@ import React,{useState, useEffect}  from 'react'
 import useFetch from '../hooks/useFetch'
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-import Add_User_Form from './Add User Form';
+import UserForm from './UserForm';
 import Alert from './Alert';
 import Popup from './Popup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { handlePopup } from '../../features/ui/uiSlice'
 
 function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUser, setDeleteSelectedUser, setDataToPrint, dataToPrint}) {
@@ -20,7 +20,9 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                                                             noOfUsersFailedToDelete : 0,
                                                             noOfDeletedUsers : 0,
                                                             });
-    let dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+
 
     useEffect(() => {
         fetchData({url : 'https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/'})
@@ -151,7 +153,8 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
         }
     },[deleteSelectedUser])
     return (
-    <div className={`w-full`}>
+    <>
+    <div className={`w-full ${isAnyModalOpen ? 'blurred' : ''}`}>
         {!dataToPrint && loading && 
                 <div className='text-center mt-5 text-red-500 font-bold text-lg'>Loading Data ....</div>
         }
@@ -255,10 +258,11 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                 </tbody>
             </table>
         }
-        <div>
+    </div>
+    <div>
 
             {userToEdit  &&  isEditFormOpen &&
-                        <Add_User_Form  
+                        <UserForm  
                             operation = 'editing' 
                             userObj = {userToEdit} 
                             handleClose = {handleCloseEditForm}
@@ -279,7 +283,7 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                     alertType={'normal'}
                 />
             }
-            {!isDeleted &&  error && 
+            {!isDeleted && dataToPrint &&  error && 
                 <Alert 
                     heading={"Delete User Failed"} 
                     message={"Unable to delete the user due to " + error.message}
@@ -315,8 +319,7 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                 />
             }
         </div>
-       
-    </div>
+    </>
   )
 }
 

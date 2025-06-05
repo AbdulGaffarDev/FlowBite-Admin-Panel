@@ -10,9 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 function Products() {
   const dispatch = useDispatch()
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
-  console.log(isProductFormOpen)
+  const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
   return (
-     <div className='flex flex-col gap-4'>
+    <>
+     <div className={`flex flex-col gap-4
+                    ${isAnyModalOpen ? 'blurred' : ''}
+     `}>
         <div className='mt-3 ml-68 w-265 '>
           <nav>
             <ol className='flex gap-2 items-center'>
@@ -86,10 +89,11 @@ function Products() {
         <div className='mt-3 ml-68 overflow-x-auto'>
             <ProductsTable />
         </div>
+        </div>
         {isProductFormOpen && 
          <ProductForm />
         }
-        </div>
+        </>
   )
 }
 
