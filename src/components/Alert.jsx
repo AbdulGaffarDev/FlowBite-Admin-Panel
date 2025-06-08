@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Alert({ heading, message, alertType }) {
   const [timeRemaining, setTimeRemaining] = useState(4);

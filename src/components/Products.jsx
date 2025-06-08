@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import  {useState} from 'react'
 import {FaHome, FaAngleRight } from "react-icons/fa";
 import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
@@ -10,7 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 function Products() {
   const dispatch = useDispatch()
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
-  const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+  const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+
+  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
   return (
     <>
      <div className={`flex flex-col gap-4

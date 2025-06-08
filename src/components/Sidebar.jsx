@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import { useState} from "react";
 import { useSelector } from "react-redux";
 import {
   FaChartPie ,
@@ -12,7 +12,11 @@ import { GoTriangleRight, GoTriangleDown } from "react-icons/go";
 
 function Sidebar() {
     const themeState = useSelector(state => state.ui.theme)
-    const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+    const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+    const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+    const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+
+    const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
     const [activeItem,setActiveItem] = useState(null);
     
     const toggleItem = (label) => {

@@ -1,5 +1,4 @@
-import ProductForm from "./components/ProductForm";
-import Navbar from "./components/navbar"
+import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar";
 import Users from "./components/Users";
 import Products from "./components/Products";

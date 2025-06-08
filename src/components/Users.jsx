@@ -21,6 +21,11 @@ const Users = () => {
   
   const themeState = useSelector(state => state.ui.theme);
   const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
+  const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+  const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+
+  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen;
 
   let dispatch = useDispatch();
   let handleCloseAddUserForm = () => setIsAddUserFormOpen(false)
@@ -48,7 +53,9 @@ const Users = () => {
   
   return (
     <div className='flex flex-col gap-4'>
-    <div className='mt-3 ml-68 w-265 '>
+    <div className={`mt-3 ml-68 w-265 
+                    ${isAnyModalOpen ? 'blurred' : ''}
+      `}>
       <nav>
         <ol className='flex gap-2 items-center'>
             <li>

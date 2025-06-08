@@ -1,4 +1,4 @@
-import React,{useState, useEffect}  from 'react'
+import {useState, useEffect}  from 'react'
 import useFetch from '../hooks/useFetch'
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -21,7 +21,11 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                                                             noOfDeletedUsers : 0,
                                                             });
     const dispatch = useDispatch();
-    const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+    const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+  const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+
+  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
 
 
     useEffect(() => {

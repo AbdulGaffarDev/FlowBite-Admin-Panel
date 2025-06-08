@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import {useFormik} from 'formik'
 import UserFormSchema from '../schemas/UserForm'

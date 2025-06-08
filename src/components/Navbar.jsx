@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
 import { AiFillAppstore } from "react-icons/ai";
 import { IoMoonSharp, IoSunny  } from "react-icons/io5";
-import { toggleTheme, setTheme } from '../../features/ui/uiSlice';
+import { toggleTheme, setTheme } from '../features/ui/uiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 function Navbar() {
   let themeState = useSelector((state) => state.ui.theme);
   const dispatch = useDispatch()
-  const isAnyModalOpen = useSelector(state => state.ui.isPopupOpen) || useSelector(state => state.ui.isAlertDisplaying) || useSelector(state => state.ui.isProductFormOpen) 
+  const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+  const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+
+  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
 
 
   useEffect(() => {
@@ -39,7 +43,7 @@ function Navbar() {
               `}>Flowbite</h1>
           </div>
           <div className='flex items-center ml-17 m-0 relative'>
-            <form action='Javascript:void(0)' className='flex'>
+            <form onSubmit={(e) => e.preventDefault()} className='flex'>
               <input type="search" name="search" placeholder='Search' 
                      className={`border-1 border-gray-400 rounded-2xl p-1 pl-10 pr-3 min-h-8 w-70
                                 ${themeState === 'light' ? 'text-black placeholder-gray-400' : 'text-white shadow-sm shadow-gray-100'}

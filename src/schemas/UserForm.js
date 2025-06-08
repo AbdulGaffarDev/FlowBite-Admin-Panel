@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const UserFormSchema = Yup.object({
+const UserForm = Yup.object({
     firstName : Yup.string()
         .min(3, 'At least 3 characters are required')
         .max(15, 'Max limit is 15 characters')
@@ -45,4 +45,4 @@ const UserFormSchema = Yup.object({
         ),
 })
 
-export default UserFormSchema;
+export default UserForm;
