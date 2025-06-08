@@ -1,7 +1,7 @@
 import React from 'react'
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector} from 'react-redux';
-import { handlePopup } from '../../features/ui/uiSlice'
+import { handlePopup } from '../features/ui/uiSlice'
 
 function Popup({heading, showingPopupFor, message, btn1Text, btn2Text, handleDeleteSelectedUsers }) {
  

@@ -4,7 +4,7 @@ import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
 import ProductsTable from './ProductsTable';
 import ProductForm from './ProductForm';
-import { handleProductForm } from '../../features/ui/uiSlice'
+import { handleProductForm } from '../features/ui/uiSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
 function Products() {

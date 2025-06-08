@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import  {useState} from 'react'
 
 function useFetch(  ) {
    
@@ -7,7 +7,6 @@ function useFetch(  ) {
     const [error, setError] = useState(null)
     const [updatedUser, setUpdatedUser] = useState(null)
     const [newUser, setNewUser] = useState(null)
-    const [deletedUser, setDeletedUser] = useState(null)
 
         const fetchData = async ({url, method = 'GET', body = null}) => {
             setLoading(true);

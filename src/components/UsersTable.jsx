@@ -6,7 +6,7 @@ import UserForm from './UserForm';
 import Alert from './Alert';
 import Popup from './Popup';
 import { useDispatch, useSelector } from 'react-redux';
-import { handlePopup } from '../../features/ui/uiSlice'
+import { handlePopup } from '../features/ui/uiSlice'
 
 function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUser, setDeleteSelectedUser, setDataToPrint, dataToPrint}) {
     const {data, loading, error, fetchData} = useFetch()

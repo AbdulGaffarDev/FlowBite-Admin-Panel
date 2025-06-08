@@ -7,7 +7,7 @@ import UsersTable from './UsersTable';
 import UserForm from './UserForm';
 import Popup from './Popup';
 import { useDispatch, useSelector } from 'react-redux';
-import { handlePopup } from '../../features/ui/uiSlice'
+import { handlePopup } from '../features/ui/uiSlice'
 
 
 const Users = () => {

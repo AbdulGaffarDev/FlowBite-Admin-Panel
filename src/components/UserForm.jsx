@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import {useFormik} from 'formik'
-import UserFormSchema from '../schemas/UserFormSchema'
+import UserFormSchema from '../schemas/UserForm'
 import useFetch from '../hooks/useFetch';
 import Alert from './Alert';
 import { useSelector, useDispatch } from 'react-redux';

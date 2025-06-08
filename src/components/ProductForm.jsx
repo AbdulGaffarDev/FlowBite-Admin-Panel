@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux'; 
-import { handleProductForm } from '../../features/ui/uiSlice'
+import { handleProductForm } from '../features/ui/uiSlice'
 import { useForm } from "react-hook-form"
 
 function ProductForm() {

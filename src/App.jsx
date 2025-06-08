@@ -1,8 +1,8 @@
-import ProductForm from "./assets/components/ProductForm";
-import Navbar from "./assets/components/navbar"
-import Sidebar from "./assets/components/Sidebar";
-import Users from "./assets/components/Users";
-import Products from "./assets/components/Products";
+import ProductForm from "./components/ProductForm";
+import Navbar from "./components/navbar"
+import Sidebar from "./components/Sidebar";
+import Users from "./components/Users";
+import Products from "./components/Products";
 
 function App() {
 
