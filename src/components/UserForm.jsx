@@ -238,7 +238,7 @@ function UserForm({userObj, operation, handleClose, setDataToPrint}) {
                 >{isUserObjFound ? "Save all" : 'Add user' }</button>
             </div>
        </div>
-         {loading && userObj &&
+         {loading && userObj && !error &&
             <Alert 
                 heading={"Updating User..."} 
                 message={"Please wait while we save the changes."} 
@@ -273,7 +273,7 @@ function UserForm({userObj, operation, handleClose, setDataToPrint}) {
                 alertType={'danger'} 
             />
          }
-        {operationStatus === 'added' &&
+        {operationStatus === 'added' && !error &&
             <Alert 
                 heading={"User Added"} 
                 message={"New user has been successfully added to the system."} 

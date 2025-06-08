@@ -52,10 +52,12 @@ const Users = () => {
   },[noOfSelectedUsers])
   
   return (
-    <div className='flex flex-col gap-4'>
-    <div className={`mt-3 ml-68 w-265 
+    <>
+    <div className={`flex flex-col gap-4 min-h-full h-full
                     ${isAnyModalOpen ? 'blurred' : ''}
+                    ${themeState==='light'? 'bg-white':'bg-blue-950 text-white'}
       `}>
+    <div className={`mt-3 ml-68 w-265`}>
       <nav>
         <ol className='flex gap-2 items-center'>
             <li>
@@ -84,7 +86,9 @@ const Users = () => {
           <div className='flex gap-2 w-[50%] items-center justify-between'>
               <form action="Javascript:void(0)">
                   <input type="search" name="searchUsers" placeholder='Search for users' 
-                        className='border-[1px] border-gray-300 rounded-lg px-3 py-2 bg-gray-100 w-[170%]'
+                        className={`border-[1px] border-gray-300 rounded-lg px-3 py-2 bg-gray-100 w-[170%]
+                                    ${themeState==='light' ? '' : 'bg-gray-800'}
+                          `}
                         onChange={e => setSearchedValue(e.target.value)}
                   />
               </form>     
@@ -117,11 +121,14 @@ const Users = () => {
               <button 
                 className='flex items-center gap-2 justify-center text-white bg-blue-700 hover:bg-blue-800 rounded-lg cursor-pointer text-center py-2 px-3'
                 onClick={() => setIsAddUserFormOpen(true)}
+                disabled={dataToPrint!==null || dataToPrint!==0}
               >
                   <IoIosAdd className='text-[#ffffff] text-2xl' />
                   Add user
               </button>
-              <button className='flex items-center gap-2 justify-center bg-white hover:bg-blue-50 rounded-lg cursor-pointer py-2 px-2 border border-gray-200'>
+              <button className={`flex items-center gap-2 justify-center  rounded-lg cursor-pointer py-2 px-2 border 
+                      ${themeState==='dark'? 'bg-gray-700 hover:bg-gray-800 border-gray-600':'bg-white hover:bg-blue-50 border-gray-200'}
+                `}>
                 <RiFileDownloadFill className='text-2xl'/>
                 Export
               </button>
@@ -139,7 +146,7 @@ const Users = () => {
           dataToPrint={dataToPrint}
         />
     </div>
-    <div>
+    <div className='min-h-full h-full'>
       {isAddUserFormOpen && 
               <UserForm 
                 handleClose={handleCloseAddUserForm} 
@@ -147,14 +154,15 @@ const Users = () => {
                 setDataToPrint={setDataToPrint}
         />}
     </div>
-       {showPopupFor === "showInfo" && noOfSelectedUsers !== 0 &&
+    </div>
+      {showPopupFor === "showInfo" && noOfSelectedUsers !== 0 &&
           <Popup 
             heading={"Selected Users"} 
             message={`You have selected ${noOfSelectedUsers} user(s).`}
             showingPopupFor={showPopupFor}
           />
         }
-        {showPopupFor === "deleteIcon" && 
+      {showPopupFor === "deleteIcon" && 
           <Popup 
             handleDeleteSelectedUsers = {handleDeleteSelectedUsers}
             heading={"Delete Users"} 
@@ -164,7 +172,7 @@ const Users = () => {
             showingPopupFor={showPopupFor}
           />
         }
-    </div>
+    </>
   )
 }
 

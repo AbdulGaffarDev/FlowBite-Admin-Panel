@@ -25,7 +25,7 @@ function Sidebar() {
   return (
     <div>
     <div className={`sidebarContainer 
-                ${themeState==='light'? 'bg-white':'bg-blue-950'} 
+                ${themeState==='light'? 'bg-white':'bg-blue-950 border-r border-white'} 
                 ${isAnyModalOpen ? 'blurred' : ''}
                 `} >
         

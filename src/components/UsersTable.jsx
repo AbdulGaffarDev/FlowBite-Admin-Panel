@@ -22,11 +22,11 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                                                             });
     const dispatch = useDispatch();
     const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
-  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
-  const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+    const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+    const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
 
-  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
-
+    const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
+    const themeState = useSelector(state => state.ui.theme);
 
     useEffect(() => {
         fetchData({url : 'https://6821faa1b342dce8004c9871.mockapi.io/usersdata/users/'})
@@ -158,9 +158,9 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
     },[deleteSelectedUser])
     return (
     <>
-    <div className={`w-full ${isAnyModalOpen ? 'blurred' : ''}`}>
+    <div className={`w-full min-h-full h-full ${isAnyModalOpen ? 'blurred' : ''}`}>
         {!dataToPrint && loading && 
-                <div className='text-center mt-5 text-red-500 font-bold text-lg'>Loading Data ....</div>
+                <div className='text-center mt-5 text-red-500 font-bold text-lg '>Loading Data ....</div>
         }
         {/* {data && debouncedSearchTerm && 
             <div className='text-center mt-5 text-red-400'>
@@ -168,15 +168,18 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
             </div> 
         }    */}
         {error && 
-           <div className='text-center mt-5 text-red-500 font-bold text-lg'>
+           <div className='text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96'>
                 {error.message}
            </div>
 
         }
         {dataToPrint  &&
-            <table className='min-w-max w-full'>
+            <table className={`min-w-max min-h-max
+            `}>
                 <thead>
-                    <tr className='font-medium text-[14px] bg-gray-200 border-1 border-gray-300'>
+                    <tr className={`font-medium text-[14px] border-1 border-gray-300
+                             ${themeState==='dark'? 'bg-gray-600' : 'bg-gray-200'}
+                        `}>
                         <th className='px-2 py-3'>
                             <form action={'JavaScript:void(0)'}>
                                 <input type="checkbox" name="selectAllUsers" id="selectAllUsers" 
@@ -200,7 +203,10 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                    {
 
                     dataToPrint.map((user) => (
-                       <tr key={user.id} className='border-1 border-gray-300 hover:bg-gray-100'>
+                       <tr key={user.id} 
+                           className={`border-1 border-gray-300 cursor-pointer
+                             ${themeState==='dark'? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+                           >
                         <td className='p-3 w-4 py-3'>
                             <form action={'JavaScript:void(0)'}>
                                 <input type="checkbox" name="selectUser" 

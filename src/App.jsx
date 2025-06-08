@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col w-[100%]  mt-19 overflow-x-hidden">
+      <div className="flex flex-col w-[100%] h-full min-h-max  mt-19 overflow-x-hidden">
         <Navbar />
           <Sidebar />
           <Users />
