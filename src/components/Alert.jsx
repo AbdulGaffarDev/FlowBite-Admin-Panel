@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function Alert({ heading, message, alertType }) {
   const [timeRemaining, setTimeRemaining] = useState(4);
   const [show, setShow] = useState(true);
+  const themeState = useSelector(state => state.ui.theme);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,7 +31,9 @@ function Alert({ heading, message, alertType }) {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center'>
-      <div className='w-96 bg-white rounded-lg shadow-xl relative overflow-hidden text-center'>
+      <div className={`w-96 rounded-lg shadow-xl relative overflow-hidden text-center
+                  ${themeState === 'dark' ? 'bg-blue-950 shadow shadow-gray-100' : 'bg-white'}
+        `}>
         {/* Progress bar that decreases over time */}
         <div 
           className={`h-1 transition-all duration-1000 ease-linear 
@@ -44,7 +48,7 @@ function Alert({ heading, message, alertType }) {
             }>
             {heading}
           </h1>
-          <p className='text-gray-700'>
+          <p className={`${themeState==='dark' ? 'text-white' : 'text-gray-700'}`}>
             {message}
           </p>
         </div>

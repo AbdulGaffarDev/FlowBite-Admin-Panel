@@ -54,10 +54,11 @@ const Users = () => {
   return (
     <>
     <div className={`flex flex-col gap-4 min-h-full h-full
-                    ${isAnyModalOpen ? 'blurred' : ''}
                     ${themeState==='light'? 'bg-white':'bg-blue-950 text-white'}
       `}>
-    <div className={`mt-3 ml-68 w-265`}>
+    <div className={`mt-3 ml-68 w-265
+                    ${isAnyModalOpen ? 'blurred' : ''}
+      `}>
       <nav>
         <ol className='flex gap-2 items-center'>
             <li>
@@ -121,7 +122,6 @@ const Users = () => {
               <button 
                 className='flex items-center gap-2 justify-center text-white bg-blue-700 hover:bg-blue-800 rounded-lg cursor-pointer text-center py-2 px-3'
                 onClick={() => setIsAddUserFormOpen(true)}
-                disabled={dataToPrint!==null || dataToPrint!==0}
               >
                   <IoIosAdd className='text-[#ffffff] text-2xl' />
                   Add user
@@ -147,7 +147,7 @@ const Users = () => {
         />
     </div>
     <div className='min-h-full h-full'>
-      {isAddUserFormOpen && 
+      {isAddUserFormOpen && (dataToPrint!==null && dataToPrint!==0) &&
               <UserForm 
                 handleClose={handleCloseAddUserForm} 
                 operation={'addingUser'}

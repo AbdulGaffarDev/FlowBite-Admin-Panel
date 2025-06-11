@@ -113,6 +113,7 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                         setisDeleted(null);
                     }, 5000)
                 setWantsToDelete(false);
+                dispatch(handlePopup())
             }
      }
 
@@ -160,7 +161,7 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
     <>
     <div className={`w-full min-h-full h-full ${isAnyModalOpen ? 'blurred' : ''}`}>
         {!dataToPrint && loading && 
-                <div className='text-center mt-5 text-red-500 font-bold text-lg '>Loading Data ....</div>
+                <div className='text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96'>Loading Data ....</div>
         }
         {/* {data && debouncedSearchTerm && 
             <div className='text-center mt-5 text-red-400'>

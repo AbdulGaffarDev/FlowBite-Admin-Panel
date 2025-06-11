@@ -6,12 +6,16 @@ function Popup({heading, showingPopupFor, message, btn1Text, btn2Text, handleDel
  
   let dispatch = useDispatch();
 const isPopupOpen = useSelector((state) => state.ui.isPopupOpen);
+const themeState = useSelector(state => state.ui.theme);
+
 
 if(!isPopupOpen){return null}
   
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center flex-col'>
-      <div className='h-max w-90  bg-white rounded-xl shadow-2xl px-5 py-4 relative text-center'>
+      <div className={`h-max w-90 rounded-xl shadow-2xl px-5 py-4 relative text-center
+                  ${themeState === 'dark' ? 'bg-blue-950 shadow-sm shadow-gray-100' : 'bg-white'}
+        `}>
           <span 
             onClick={() => dispatch(handlePopup())}
           >
@@ -33,7 +37,7 @@ if(!isPopupOpen){return null}
                 {btn1Text}
               </button>}  
             {btn2Text && 
-              <button className={`common-btn-style px-3 ${btn2Text === "Cancel" ? 'normal-btn' : '' }`}
+              <button className={`common-btn-style px-3 text-black ${btn2Text === "Cancel" ? 'normal-btn' : '' }`}
                       onClick={() => btn2Text === "Cancel" ? dispatch(handlePopup()) :  null}
                >
                 {btn2Text}

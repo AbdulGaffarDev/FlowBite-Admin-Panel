@@ -123,7 +123,7 @@ function UserForm({userObj, operation, handleClose, setDataToPrint}) {
     <div className='formMainContainer'>
         <div 
             className={`formContainer
-                        ${themeState === 'light' ? 'bg-white text-black' : 'bg-blue-950 text-white'}
+                        ${themeState === 'light' ? 'bg-white text-black' : 'bg-blue-950 text-white shadow-sm shadow-gray-100'}
                 `}
         >
             <div className='flex justify-between pt-3 pb-4 px-5 font-medium  text-gray-600  border-b-gray-300 border-b-[1px]'>
@@ -232,7 +232,7 @@ function UserForm({userObj, operation, handleClose, setDataToPrint}) {
             </div>
             <div className='my-7 mx-4' >
                 <button type="submit"
-                        className={`px-4 py-2 rounded-lg text-white ${(operation === 'editing' && !isValueUpdated)? 'bg-gray-800':'bg-blue-700'}`}
+                        className={`px-4 py-2 rounded-lg text-white ${(operation === 'editing' && !isValueUpdated)? 'bg-blue-400':'bg-blue-700'}`}
                         disabled = {!isValueUpdated}
                         onClick={handleSubmit}
                 >{isUserObjFound ? "Save all" : 'Add user' }</button>
