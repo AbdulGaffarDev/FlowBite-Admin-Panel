@@ -10,16 +10,19 @@ import { useDispatch, useSelector } from 'react-redux';
 function Products() {
   const dispatch = useDispatch()
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
-  const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
-  const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
-
-  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
+  // const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
+  // const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
+  
+  const themeState = useSelector(state => state.ui.theme);
+  const isAnyModalOpen =  isProductFormOpen; 
   return (
     <>
-     <div className={`flex flex-col gap-4
+     <div className={`flex flex-col gap-4 min-h-full h-full
+                    ${themeState==='light'? 'bg-white':'bg-blue-950 text-white'}
+      `}>
+        <div className={`mt-3 ml-68 w-265
                     ${isAnyModalOpen ? 'blurred' : ''}
-     `}>
-        <div className='mt-3 ml-68 w-265 '>
+      `}>
           <nav>
             <ol className='flex gap-2 items-center'>
                 <li>
@@ -48,7 +51,9 @@ function Products() {
               <div className='flex gap-2 w-[50%] items-center justify-between'>
                   <form action="Javascript:void(0)">
                       <input type="search" name="searchUsers" placeholder='Search for products' 
-                            className='border-[1px] border-gray-300 rounded-lg px-3 py-2 bg-gray-100 w-[170%]'
+                           className={`border-[1px] border-gray-300 rounded-lg px-3 py-2 bg-gray-100 w-[170%]
+                                    ${themeState==='light' ? '' : 'bg-gray-800'}
+                          `}
                       />
                   </form>     
                   <div className='flex gap-3 text-2xl text-gray-500 border-l-[1px] border-l-gray-300 pl-3'>
@@ -71,17 +76,15 @@ function Products() {
               </div>
               <div className='flex gap-2 mr-4'>
                   <button 
-                    className='flex items-center gap-2 justify-center text-white bg-blue-700 hover:bg-blue-800 rounded-lg cursor-pointer text-center py-2 px-3'
-                    onClick={() => {
-                      console.log("Working")
-                      dispatch(handleProductForm());
-                      console.log(isProductFormOpen)
-                    }}
+                    className='actionBtn text-white bg-blue-700 hover:bg-blue-800 px-3'
+                    onClick={() => { dispatch(handleProductForm())}}
                   >
                       <IoIosAdd className='text-[#ffffff] text-2xl' />
                       Add Product
                   </button>
-                  <button className='flex items-center gap-2 justify-center bg-white hover:bg-blue-50 rounded-lg cursor-pointer py-2 px-2 border border-gray-200'>
+                  <button className={`actionBtn 
+                      ${themeState==='dark'? 'bg-gray-700 hover:bg-gray-800 border-gray-600':'bg-white hover:bg-blue-50 border-gray-200'}
+                  `}>
                     <RiFileDownloadFill className='text-2xl'/>
                     Export
                   </button>

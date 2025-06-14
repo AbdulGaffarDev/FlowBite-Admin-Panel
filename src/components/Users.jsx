@@ -120,13 +120,13 @@ const Users = () => {
           </div>
           <div className='flex gap-2 mr-4'>
               <button 
-                className='flex items-center gap-2 justify-center text-white bg-blue-700 hover:bg-blue-800 rounded-lg cursor-pointer text-center py-2 px-3'
+                className='actionBtn text-white bg-blue-700 hover:bg-blue-800 px-3'
                 onClick={() => setIsAddUserFormOpen(true)}
               >
                   <IoIosAdd className='text-[#ffffff] text-2xl' />
                   Add user
               </button>
-              <button className={`flex items-center gap-2 justify-center  rounded-lg cursor-pointer py-2 px-2 border 
+              <button className={`actionBtn 
                       ${themeState==='dark'? 'bg-gray-700 hover:bg-gray-800 border-gray-600':'bg-white hover:bg-blue-50 border-gray-200'}
                 `}>
                 <RiFileDownloadFill className='text-2xl'/>

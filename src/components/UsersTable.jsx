@@ -161,7 +161,7 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
     <>
     <div className={`w-full min-h-full h-full ${isAnyModalOpen ? 'blurred' : ''}`}>
         {!dataToPrint && loading && 
-                <div className='text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96'>Loading Data ....</div>
+                <div className='errorAndLoadMessage'>Loading Data ....</div>
         }
         {/* {data && debouncedSearchTerm && 
             <div className='text-center mt-5 text-red-400'>
@@ -169,16 +169,15 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
             </div> 
         }    */}
         {error && 
-           <div className='text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96'>
+           <div className='errorAndLoadMessage'>
                 {error.message}
            </div>
 
         }
         {dataToPrint  &&
-            <table className={`min-w-max min-h-max
-            `}>
+            <table className={`min-w-max min-h-max mr-3`}>
                 <thead>
-                    <tr className={`font-medium text-[14px] border-1 border-gray-300
+                    <tr className={`tableHead
                              ${themeState==='dark'? 'bg-gray-600' : 'bg-gray-200'}
                         `}>
                         <th className='px-2 py-3'>
@@ -192,12 +191,12 @@ function UsersTable({setNoOfSelectedUsers, debouncedSearchTerm, deleteSelectedUs
                                 />
                             </form>
                         </th>
-                        <th className='font-[400] p-4 text-left'>NAME</th>
-                        <th className='font-[400] p-4 text-left'>BIOGRAPHY</th>
-                        <th className='font-[400] p-4 text-left'>POSITION</th>
-                        <th className='font-[400] p-4 text-left'>COUNTRY</th>
-                        <th className='font-[400] p-4 text-left'>STATUS</th>
-                        <th className='font-[400] p-4 text-left'>ACTIONS</th>
+                        <th className='tableHeading'>NAME</th>
+                        <th className='tableHeading'>BIOGRAPHY</th>
+                        <th className='tableHeading'>POSITION</th>
+                        <th className='tableHeading'>COUNTRY</th>
+                        <th className='tableHeading'>STATUS</th>
+                        <th className='tableHeading'>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -112,3 +112,23 @@
 .inputFields-light {
   @apply border border-gray-400 rounded-sm py-2 px-3 w-full mt-2 bg-gray-50;
 }
+
+/* Users and Products */
+.actionBtn{
+    @apply flex items-center gap-2 justify-center  rounded-lg cursor-pointer py-2 px-2 border
+}
+
+/* Products Table */
+.tableHead{
+    @apply border-1 border-gray-300 font-medium text-[14px]
+}
+.tableRow{
+    @apply border-1 border-gray-300 cursor-pointer
+}
+.tableHeading{
+    @apply font-[400] p-4 text-left
+}
+
+.errorAndLoadMessage{
+    @apply text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96
+}
