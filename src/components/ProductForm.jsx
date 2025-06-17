@@ -152,7 +152,7 @@ function ProductForm() {
                                         message : 'At least 8 characters are required' 
                                     },
                                     pattern : {
-                                        value : /^[a-zA-Z0-9]+$/,
+                                        value : /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
                                         message : "Barcode must be alphanumeric"
                                         }
                                     },

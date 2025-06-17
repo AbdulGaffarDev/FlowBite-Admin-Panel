@@ -1,25 +1,79 @@
-
-// import {useState, useEffect}  from 'react'
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaEye, FaArrowAltCircleUp, FaArrowAltCircleDown} from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
+import useProducts from "../services/useProducts";
+import { useEffect, useState } from "react";
 
 
-function ProductsTable() {
-    // const [selectedUsers, setSelectedUsers] = useState({});
+function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
+    const [selectedProducts, setSelectedProducts] = useState({});
+    const [dataToPrint, setDataToPrint] = useState([])
+    const [hoveredBadge, setHoveredBadge] = useState(null)
     const dispatch = useDispatch();
-    // const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
-    // const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
     const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
 
     const isAnyModalOpen =   isProductFormOpen; 
     const themeState = useSelector(state => state.ui.theme);
 
-   
+    const { createProduct, 
+            getProductById, 
+            updateProduct, 
+            deleteProduct, 
+            isSubmitting,
+            isLoading,
+            products,
+            error
+        } = useProducts()
+
+    useEffect(() => {
+        setDataToPrint(products);
+    },[products, hoveredBadge])
+
+    let handleSelectAll = (e) => {
+        const isChecked = e.target.checked;
+        const updatedState = {};    
+        let selectedProducts = 0;
+        
+        dataToPrint.forEach(product => {
+            updatedState[product.id] = isChecked; 
+            if(isChecked){selectedProducts++}
+        })
+
+        setSelectedProducts(updatedState);
+        setNoOfSelectedProducts(selectedProducts);
+    }
+
+    let handleCheckBoxChange = (e) => {
+            let id = Number(e.target.id);
+            let isChecked = e.target.checked;
+            setNoOfSelectedProducts(prev => isChecked ? prev + 1 : prev - 1);
+
+            setSelectedProducts(prev => ({
+                ...prev, 
+                [id] : isChecked
+            }))
+    }
+
+     useEffect(() => {
+        let filteredProducts = [];
+        // Display all products when nothing in search field
+        if(!debouncedSearchTerm?.trim()){
+            setDataToPrint(products);
+            return;
+        }
+        let terms = debouncedSearchTerm.split(' ');
+        filteredProducts = products.filter((product) => {
+                let content = `${product.name} ${product.sellPrice} ${product.stock} ${product.brand} ${product.barcode}`.toLowerCase();
+                return terms.some(term => content.includes(term))
+        });
+        setDataToPrint(filteredProducts);
+            
+    }, [debouncedSearchTerm, products])
+
     return (
     <>
-    <div className={`w-full min-h-full h-full m-3 box-border ${isAnyModalOpen ? 'blurred' : ''}`}>
-        {/* {!dataToPrint && loading && 
+    <div className={`max-w-full min-w-max min-h-full h-full m-3 box-border ${isAnyModalOpen ? 'blurred' : ''}`}>
+        {!dataToPrint && isLoading && 
                 <div className='errorAndLoadMessage'>Loading Data ....</div>
         }   
         {error && 
@@ -27,8 +81,8 @@ function ProductsTable() {
                 {error.message}
            </div>
 
-        } */}
-        {/* {dataToPrint  && */}
+        }
+        {dataToPrint  &&
             <table className={`min-w-max min-h-max w-full`}>
                 <thead>
                     <tr className={`tableHead
@@ -36,33 +90,36 @@ function ProductsTable() {
                         `}>
                         <th className='px-2 py-3'>
                             <form action={'JavaScript:void(0)'}>
-                                <input type="checkbox" name="selectAllUsers" id="selectAllUsers" 
-                                        // onChange = {handleSelectAll}
+                                <input type="checkbox" name="selectAllProducts" id="selectAllProducts" 
+                                        onChange = {handleSelectAll}
                                         className='h-[14px] w-[14px]'
-                                        
+                                        checked = {
+                                            dataToPrint.length > 0 && dataToPrint.every(product => selectedProducts[product.id])
+                                        }
                                 />
                             </form>
                         </th>
                         <th className='tableHeading'>NAME</th>
-                        <th className='tableHeading'>Selling Price</th>
-                        <th className='tableHeading'>Barcode</th>
-                        <th className='tableHeading'>Available QTY</th>
+                        <th className='tableHeading'>SELLING PRICE</th>
+                        <th className='tableHeading'>BRAND</th>
+                        <th className='tableHeading'>BARCODE</th>
+                        <th className='tableHeading'>AVAILABLE QTY</th>
                         <th className='tableHeading'>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                   {/* {
+                   {
 
-                    dataToPrint.map((user) => (
-                       <tr key={user.id} 
+                    dataToPrint.map((product) => (
+                       <tr key={product.id} 
                            className={`border-1 border-gray-300 cursor-pointer
                              ${themeState==='dark'? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
                            >
                         <td className='p-3 w-4 py-3'>
                             <form action={'JavaScript:void(0)'}>
-                                <input type="checkbox" name="selectUser" 
-                                       id={user.id}
-                                       checked={!!selectedUsers[user.id]}
+                                <input type="checkbox" name="selectproduct" 
+                                       id={product.id}
+                                       checked={!!selectedProducts[product.id]}
                                        onChange={handleCheckBoxChange}
                                        className='h-[15px] w-[15px]'
                                 />
@@ -70,52 +127,70 @@ function ProductsTable() {
                         </td>
                         <td className='p-4'>
                             <div className='flex'>
-                                <div>
-                                    <img src={user.profilePic} alt="Profile" 
+                                {/* <div>
+                                    <img src={product.profilePic} alt="Profile" 
                                          className='h-11 w-11 rounded-[50%] mx-4'
                                     />
-                                </div>
+                                </div> */}
                                 <div>
-                                    <h3 className='font-medium'>{user.firstName + " " + user.lastName}</h3>
+                                    <h3 className='font-medium'>{product.name}</h3>
                                 </div>
                             </div> 
                         </td>
-                        <td className='p-4 whitespace-nowrap'>{user.sellingPrice}</td>
-                        <td className='p-4'>{user.barcode}</td>
+                        <td className='p-4'>{product.sellPrice}</td>
+                        <td className='p-4'>{product.brand==='' ? '_' : product.brand}</td>
+                        <td className='p-4'>{product.barcode}</td>
                         <td className='p-4'>
-                            <div className='flex items-center gap-2'>
-                                <div
-                                    className={`h-[10px] w-[10px] rounded-[50%] ${user.status === "Active" ? 'bg-green-500' : 'bg-red-500'}`}
+                            <div className='flex items-center gap-2 relative'>
+                                <span 
+                                    className={`${hoveredBadge === product.id  ? 'visible': 'invisible'}
+                                        bg-gray-400 text-white text-[13px] px-2 py-0.5 rounded-md absolute bottom-4 -left-3 
+                                    `}
                                 >
-                                </div>
-                                {user.availableQTY}
+                                    {product.stock < 20 ? "Low Stock":'Sufficient Stock'}
+                                </span>
+                                <span 
+                                    onMouseOver={() => setHoveredBadge(product.id)}
+                                    onMouseOut={() => setHoveredBadge(null)
+                                }>
+                                    {product.stock < 20 ? 
+                                        <FaArrowAltCircleDown className="text-red-500"/>: 
+                                        <FaArrowAltCircleUp className="text-green-500"/>
+                                    }
+                                </span>
+                                {product.stock}
                             </div>
                         </td>
                         <td 
-                            className='flex gap-3 items-center content-center px-5 py-4 space-x-2 whitespace-nowrap'
-                            id={user.id}
+                            className='flex gap-1 items-center content-center px-5 py-4 space-x-2 whitespace-nowrap'
+                            id={product.id}
                         >
                             <button 
-                              className='common-btn-style blue-btn'
-                              onClick={() => handleOpenEditForm(user.id)}
+                              className='iconStyle bg-blue-500 hover:bg-blue-700'
+                            //   onClick={() => handleOpenEditForm(product.id)}
                             >
                                 <FaEdit/>
-                                Update
                             </button>
                             <button 
-                                className='common-btn-style red-btn'
-                                onClick={() => handleDelete(user.id)}
+                              className='iconStyle bg-green-500 hover:bg-green-700'
+                            //   onClick={() => handleViewProduct(product.id)}
+                            >
+                                <FaEye/>
+                            </button>
+                            <button 
+                                className='iconStyle bg-red-500 hover:bg-red-700'
+                                // onClick={() => handleDelete(product.id)}
                                 >
                                 <RiDeleteBin6Fill/>
-                                Delete
                             </button>
                         </td>
 
                       </tr>  
                     ))
-                   }  */}
+                   } 
                 </tbody>
             </table>
+            }
     </div>
     </>
   )

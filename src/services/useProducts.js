@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useSWR from 'swr'
+import axios from 'axios'
 
 const API_URL = "https://6821faa1b342dce8004c9871.mockapi.io/usersdata/products";
 
@@ -11,7 +12,7 @@ function useProducts() {
     //fetches all products
     const {data : products, error, isLoading, mutate } = useSWR(API_URL, fetcher)
 
-    //fetches single product
+    //fetches single product by id
     const getProductById = async (id) => {
         try{
             setIsSubmitting(true);
@@ -41,6 +42,7 @@ function useProducts() {
         }
     }
 
+    //update product
     const updateProduct = async(id ,updatedProduct) => {
         try{
             setIsSubmitting(true);
@@ -56,6 +58,7 @@ function useProducts() {
         }
     }
 
+    //delete product
     const deleteProduct = async(id) => {
         try{
             setIsSubmitting(true);

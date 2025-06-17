@@ -132,3 +132,10 @@
 .errorAndLoadMessage{
     @apply text-center mt-5 text-red-500 font-bold text-lg min-h-full h-full pb-96
 }
+
+.iconStyle{
+    @apply cursor-pointer
+           rounded-lg
+           p-2
+           text-white
+}

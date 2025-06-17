@@ -1,4 +1,4 @@
-import  {useState} from 'react'
+import  {useState, useEffect} from 'react'
 import {FaHome, FaAngleRight } from "react-icons/fa";
 import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
@@ -6,15 +6,28 @@ import ProductsTable from './ProductsTable';
 import ProductForm from './ProductForm';
 import { handleProductForm } from '../features/ui/uiSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import useDebounce from '../hooks/useDebounce';
 
 function Products() {
   const dispatch = useDispatch()
+  const [noOfSelectedProducts, setNoOfSelectedProducts] = useState(0)
+  const [searchedValue, setSearchedValue] = useState('');
+  const [animateIcon, setAnimateIcon] = useState(false);
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
+  const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
   // const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
   // const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
   
   const themeState = useSelector(state => state.ui.theme);
   const isAnyModalOpen =  isProductFormOpen; 
+
+  useEffect(()=>{
+    if(noOfSelectedProducts !== 0){
+      setAnimateIcon(true);
+      setTimeout(()=> setAnimateIcon(false), 500);
+    }
+  },[noOfSelectedProducts])
+  
   return (
     <>
      <div className={`flex flex-col gap-4 min-h-full h-full
@@ -50,7 +63,8 @@ function Products() {
             <div className='mt-4 flex justify-between w-[100%]'>
               <div className='flex gap-2 w-[50%] items-center justify-between'>
                   <form action="Javascript:void(0)">
-                      <input type="search" name="searchUsers" placeholder='Search for products' 
+                      <input type="search" name="searchUsers" placeholder='Search for products'
+                           onChange={e => setSearchedValue(e.target.value)} 
                            className={`border-[1px] border-gray-300 rounded-lg px-3 py-2 bg-gray-100 w-[170%]
                                     ${themeState==='light' ? '' : 'bg-gray-800'}
                           `}
@@ -59,16 +73,21 @@ function Products() {
                   <div className='flex gap-3 text-2xl text-gray-500 border-l-[1px] border-l-gray-300 pl-3'>
                       <span 
                         className={`
-                            hoverEffect
-                          `}
+                          hoverEffect
+                          transition-transform duration-800 ease-in-out 
+                          ${noOfSelectedProducts !== 0 ? 'text-red-600' : ''} 
+                          ${animateIcon ? 'scale-140 -translate-y-1' : 'scale-100 translate-y-0'}
+                      `}
                       >
                         <RiDeleteBin6Fill/>
                       </span>
                      <span 
                         className={`
-                            hoverEffect
-                            transition-transform duration-800 ease-in-out 
-                          `}
+                          hoverEffect
+                          transition-transform duration-800 ease-in-out 
+                          ${noOfSelectedProducts !== 0 ? 'text-blue-600' : ''} 
+                          ${animateIcon ? 'scale-140 -translate-y-1' : 'scale-100 translate-y-0'}
+                        `}
                         >
                         <IoMdInformationCircle className='text-2xl'/>
                       </span>
@@ -93,7 +112,10 @@ function Products() {
           </div>
         </div>
         <div className='mt-3 ml-68 overflow-x-auto'>
-            <ProductsTable />
+            <ProductsTable 
+              setNoOfSelectedProducts = {setNoOfSelectedProducts}
+              debouncedSearchTerm={debouncedSearchTerm}
+            />
         </div>
         </div>
         {isProductFormOpen && 
