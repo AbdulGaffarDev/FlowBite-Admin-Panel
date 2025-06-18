@@ -13,13 +13,13 @@ function Products() {
   const [noOfSelectedProducts, setNoOfSelectedProducts] = useState(0)
   const [searchedValue, setSearchedValue] = useState('');
   const [animateIcon, setAnimateIcon] = useState(false);
-  const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
+  const [isUsersAvailable, setIsUsersAvailable] = useState(false)
+
   const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
-  // const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
-  // const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
-  
+  const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
+  const isModalOpen = useSelector(state => state.ui.isAnyModalOpen)
   const themeState = useSelector(state => state.ui.theme);
-  const isAnyModalOpen =  isProductFormOpen; 
+  const isAnyModalOpen =  isProductFormOpen || isModalOpen; 
 
   useEffect(()=>{
     if(noOfSelectedProducts !== 0){
@@ -97,6 +97,7 @@ function Products() {
                   <button 
                     className='actionBtn text-white bg-blue-700 hover:bg-blue-800 px-3'
                     onClick={() => { dispatch(handleProductForm())}}
+                    disabled={!isUsersAvailable}
                   >
                       <IoIosAdd className='text-[#ffffff] text-2xl' />
                       Add Product
@@ -115,6 +116,7 @@ function Products() {
             <ProductsTable 
               setNoOfSelectedProducts = {setNoOfSelectedProducts}
               debouncedSearchTerm={debouncedSearchTerm}
+              setIsUsersAvailable = {setIsUsersAvailable}
             />
         </div>
         </div>

@@ -1,18 +1,21 @@
+import { useEffect, useState } from "react";
+import ViewProduct from "./modals/ViewProduct";
+import useProducts from "../services/useProducts";
 import { FaEdit, FaEye, FaArrowAltCircleUp, FaArrowAltCircleDown} from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
-import useProducts from "../services/useProducts";
-import { useEffect, useState } from "react";
+import { handleIsAnyModalOpen } from "../features/ui/uiSlice";
 
 
-function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
+function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsersAvailable}) {
     const [selectedProducts, setSelectedProducts] = useState({});
     const [dataToPrint, setDataToPrint] = useState([])
     const [hoveredBadge, setHoveredBadge] = useState(null)
+    const [productToView, setProductToView] = useState(null)
     const dispatch = useDispatch();
     const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
-
-    const isAnyModalOpen =   isProductFormOpen; 
+    const isModalOpen = useSelector(state => state.ui.isAnyModalOpen)
+    const isAnyModalOpen =   isProductFormOpen || isModalOpen; 
     const themeState = useSelector(state => state.ui.theme);
 
     const { createProduct, 
@@ -27,7 +30,7 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
 
     useEffect(() => {
         setDataToPrint(products);
-    },[products, hoveredBadge])
+    },[products])
 
     let handleSelectAll = (e) => {
         const isChecked = e.target.checked;
@@ -70,6 +73,16 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
             
     }, [debouncedSearchTerm, products])
 
+    useEffect(() => {
+           setIsUsersAvailable(!(dataToPrint == null))
+    }, [dataToPrint])
+
+    const handleViewProduct= (productID) =>{
+        const selectedProduct = products.find(product => product.id === productID)
+        dispatch(handleIsAnyModalOpen())
+        setProductToView(selectedProduct)
+    }
+    
     return (
     <>
     <div className={`max-w-full min-w-max min-h-full h-full m-3 box-border ${isAnyModalOpen ? 'blurred' : ''}`}>
@@ -173,7 +186,7 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
                             </button>
                             <button 
                               className='iconStyle bg-green-500 hover:bg-green-700'
-                            //   onClick={() => handleViewProduct(product.id)}
+                              onClick={() => handleViewProduct(product.id)}
                             >
                                 <FaEye/>
                             </button>
@@ -192,6 +205,12 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm}) {
             </table>
             }
     </div>
+    {productToView && 
+        <ViewProduct 
+            productToView = {productToView}
+            setProductToView = {setProductToView}
+        />
+    }
     </>
   )
 }

@@ -193,7 +193,12 @@ function ProductForm() {
                                 className={`${themeState==='light' ? 'inputFields-light' : 'inputFields-dark'}`}    
                                 placeholder='Description'
                                 rows={3}
-                                {...register('description')}
+                                {...register('description', {
+                                    maxLength : {
+                                        value : 120 ,
+                                        message : 'Max characters are 120' 
+                                    },
+                                })}
                             >
                             </textarea>
                         </div>

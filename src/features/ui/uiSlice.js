@@ -7,6 +7,7 @@ const uiSlice = createSlice({
         isPopupOpen : false,
         isAlertDisplaying : false,
         isProductFormOpen : false,
+        isAnyModalOpen : false,
     },
     reducers : {
         toggleTheme : (state) => {
@@ -24,9 +25,12 @@ const uiSlice = createSlice({
         handleProductForm : (state) => {
             state.isProductFormOpen = !state.isProductFormOpen;
         },
+        handleIsAnyModalOpen : (state) => {
+            state.isAnyModalOpen = !state.isAnyModalOpen;
+        }
     }
 })
 
-export const {toggleTheme, setTheme, handlePopup, handleAlert, handleProductForm} = uiSlice.actions;
+export const {toggleTheme, setTheme, handlePopup, handleAlert, handleProductForm, handleIsAnyModalOpen} = uiSlice.actions;
 
 export default uiSlice.reducer;

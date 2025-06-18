@@ -12,8 +12,9 @@ function Navbar() {
   const isPopupOpen = useSelector(state => state.ui.isPopupOpen);
   const isAlertDisplaying = useSelector(state => state.ui.isAlertDisplaying);
   const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
+  const isModalOpen = useSelector(state => state.ui.isAnyModalOpen)
 
-  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen; 
+  const isAnyModalOpen = isPopupOpen || isAlertDisplaying || isProductFormOpen || isModalOpen; 
 
 
   useEffect(() => {
