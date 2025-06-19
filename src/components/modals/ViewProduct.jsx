@@ -30,7 +30,7 @@ function ViewProduct({productToView, setProductToView}) {
             </div>
             <div className="flex">
                 <div className="w-[35%] mt-4 px-6 py-4">
-                    <img src={productToView.image} alt="Product Image" />
+                    <img src={productToView.image} alt="Product Image" className="max-h-72 max-w-full"/>
                     {/* <img src="img" alt="Barcode" /> */}
                 </div>
                 <div className="w-[65%]">

@@ -67,7 +67,7 @@ function useProducts() {
             return data;
         }catch(err){
             console.error("Error ocurred while deleting the products ", err)
-            return {err : true, message : 'Failed to delete product'};
+            return {err : true, message : `${err.message} : Failed to delete product`};
         }finally{
             mutate()
             setIsSubmitting(false)

@@ -112,7 +112,7 @@ function Products() {
            </div>
           </div>
         </div>
-        <div className='mt-3 ml-68 overflow-x-auto'>
+        <div className='mt-3 ml-68 overflow-x-auto h-full'>
             <ProductsTable 
               setNoOfSelectedProducts = {setNoOfSelectedProducts}
               debouncedSearchTerm={debouncedSearchTerm}

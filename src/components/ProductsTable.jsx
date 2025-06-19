@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import ViewProduct from "./modals/ViewProduct";
-import useProducts from "../services/useProducts";
-import { FaEdit, FaEye, FaArrowAltCircleUp, FaArrowAltCircleDown} from "react-icons/fa";
+import toast from 'react-hot-toast';
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
+import { FaEdit, FaEye, FaArrowAltCircleUp, FaArrowAltCircleDown} from "react-icons/fa";
+import ViewProduct from "./modals/ViewProduct";
+import useProducts from "../services/useProducts";
 import { handleIsAnyModalOpen } from "../features/ui/uiSlice";
+import Confirmation from "./modals/Confirmation";
 
 
 function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsersAvailable}) {
@@ -12,6 +14,8 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
     const [dataToPrint, setDataToPrint] = useState([])
     const [hoveredBadge, setHoveredBadge] = useState(null)
     const [productToView, setProductToView] = useState(null)
+    const [productToDelete, setProductToDelete] = useState(null)
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(null)
     const dispatch = useDispatch();
     const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
     const isModalOpen = useSelector(state => state.ui.isAnyModalOpen)
@@ -77,10 +81,26 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
            setIsUsersAvailable(!(dataToPrint == null))
     }, [dataToPrint])
 
-    const handleViewProduct= (productID) =>{
+    const handleView = (productID) =>{
         const selectedProduct = products.find(product => product.id === productID)
         dispatch(handleIsAnyModalOpen())
         setProductToView(selectedProduct)
+    }
+
+    const handleDelete = (productID) => {
+        setProductToDelete(productID)
+        setIsConfirmationModalOpen(true);
+        dispatch(handleIsAnyModalOpen())
+    }
+
+    const handleDeleteSingleProduct = async () => {
+            const res = await deleteProduct(productToDelete);
+            if(res.message){
+                toast.error(res.message);
+            }else{
+                toast.success("Product Deleted Successfully.")
+            }
+            setProductToDelete(null)
     }
     
     return (
@@ -89,14 +109,14 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
         {!dataToPrint && isLoading && 
                 <div className='errorAndLoadMessage'>Loading Data ....</div>
         }   
-        {error && 
+        {!dataToPrint && error && 
            <div className='errorAndLoadMessage'>
                 {error.message}
            </div>
 
         }
         {dataToPrint  &&
-            <table className={`min-w-max min-h-max w-full`}>
+            <table className={`min-w-max min-h-max h-full w-full`}>
                 <thead>
                     <tr className={`tableHead
                              ${themeState==='dark'? 'bg-gray-600' : 'bg-gray-200'}
@@ -139,12 +159,12 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
                             </form>
                         </td>
                         <td className='p-4'>
-                            <div className='flex'>
-                                {/* <div>
-                                    <img src={product.profilePic} alt="Profile" 
+                            <div className='flex items-center'>
+                                <div>
+                                    <img src={product.image} alt="Profile" 
                                          className='h-11 w-11 rounded-[50%] mx-4'
                                     />
-                                </div> */}
+                                </div>
                                 <div>
                                     <h3 className='font-medium'>{product.name}</h3>
                                 </div>
@@ -186,13 +206,13 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
                             </button>
                             <button 
                               className='iconStyle bg-green-500 hover:bg-green-700'
-                              onClick={() => handleViewProduct(product.id)}
+                              onClick={() => handleView(product.id)}
                             >
                                 <FaEye/>
                             </button>
                             <button 
                                 className='iconStyle bg-red-500 hover:bg-red-700'
-                                // onClick={() => handleDelete(product.id)}
+                                onClick={() => handleDelete(product.id)}
                                 >
                                 <RiDeleteBin6Fill/>
                             </button>
@@ -211,6 +231,17 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
             setProductToView = {setProductToView}
         />
     }
+   {isConfirmationModalOpen &&
+        <Confirmation 
+            heading={"Delete Product"}
+            message={"Are you sure you want to delete selected product?"}
+            btn1Label={"Delete"}
+            btn2Label={"Cancel"}
+            type={"danger"}
+            setIsConfirmationModalOpen={setIsConfirmationModalOpen}
+            handleConfirmation={handleDeleteSingleProduct}
+        /> 
+   }
     </>
   )
 }

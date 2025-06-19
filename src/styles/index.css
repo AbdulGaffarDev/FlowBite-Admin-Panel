@@ -95,11 +95,12 @@
            md:min-w-[350px] md:max-w-[750px] 
            lg:min-w-[650px] lg:max-w-[900px] 
            max-h-[85vh] overflow-auto 
-           rounded-lg shadow-2xl
+           rounded-lg 
+           shadow-lg shadow-gray-500  border border-gray-400
  }
 
  .formMainContainer{
-    @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5 shadow-lg shadow-gray-300 
+    @apply fixed inset-0 z-50 flex items-center justify-center flex-col px-5  
  }
  .closeIcon{
     @apply text-2xl box-border rounded-sm p-2
