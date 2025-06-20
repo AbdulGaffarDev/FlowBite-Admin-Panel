@@ -11,7 +11,7 @@ function App() {
     <>
       <div className="flex flex-col w-full h-full min-h-max  mt-19 overflow-x-hidden">
         <Navbar />
-          <Toaster 
+        <Toaster 
               position="top-right" 
               reverseOrder={false}
               toastOptions={{

@@ -8,6 +8,7 @@ import useDebounce from '../hooks/useDebounce';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleIsAnyModalOpen, handleProductForm } from '../features/ui/uiSlice'
 import Confirmation from './modals/Confirmation';
+import Message from './modals/Message';
 
 function Products() {
   const dispatch = useDispatch()
@@ -17,6 +18,7 @@ function Products() {
   const [isUsersAvailable, setIsUsersAvailable] = useState(false)
   const [deleteMultipleProducts, setDeleteMultipleProducts] = useState(false)
   const [confirmDeleteMany, setConfirmDeleteMany] = useState(false)
+  const [showSelectionInfo, setShowSelectionInfo] = useState(false)
 
   const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
@@ -36,7 +38,12 @@ function Products() {
           setDeleteMultipleProducts(true)
           dispatch(handleIsAnyModalOpen())
     }
-
+  
+  const handleShowInfo = () => {
+    if(noOfSelectedProducts === 0){return}
+    setShowSelectionInfo(true)
+    dispatch(handleIsAnyModalOpen())
+  }
   return (
     <>
      <div className={`flex flex-col gap-4 min-h-full h-full
@@ -98,6 +105,7 @@ function Products() {
                           ${noOfSelectedProducts !== 0 ? 'text-blue-600' : ''} 
                           ${animateIcon ? 'scale-140 -translate-y-1' : 'scale-100 translate-y-0'}
                         `}
+                        onClick={handleShowInfo}
                         >
                         <IoMdInformationCircle className='text-2xl'/>
                       </span>
@@ -145,6 +153,14 @@ function Products() {
             setIsConfirmationModalOpen={setDeleteMultipleProducts}
             handleConfirmation={() => setConfirmDeleteMany(true)}
         /> 
+        }
+        {showSelectionInfo && 
+        <Message 
+          heading={"Selected Products"}
+          message={`You have selected ${noOfSelectedProducts} products.`}
+          onClose={() => setShowSelectionInfo(false)}
+          type={'normal'}
+          />
         }
         </>
   )
