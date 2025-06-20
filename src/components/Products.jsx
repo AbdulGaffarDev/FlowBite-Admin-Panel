@@ -4,9 +4,10 @@ import {IoMdInformationCircle, IoIosAdd } from "react-icons/io";
 import {RiDeleteBin6Fill, RiFileDownloadFill} from "react-icons/ri";
 import ProductsTable from './ProductsTable';
 import ProductForm from './ProductForm';
-import { handleProductForm } from '../features/ui/uiSlice'
-import { useDispatch, useSelector } from 'react-redux';
 import useDebounce from '../hooks/useDebounce';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleIsAnyModalOpen, handleProductForm } from '../features/ui/uiSlice'
+import Confirmation from './modals/Confirmation';
 
 function Products() {
   const dispatch = useDispatch()
@@ -14,6 +15,8 @@ function Products() {
   const [searchedValue, setSearchedValue] = useState('');
   const [animateIcon, setAnimateIcon] = useState(false);
   const [isUsersAvailable, setIsUsersAvailable] = useState(false)
+  const [deleteMultipleProducts, setDeleteMultipleProducts] = useState(false)
+  const [confirmDeleteMany, setConfirmDeleteMany] = useState(false)
 
   const debouncedSearchTerm = useDebounce({ value: searchedValue, delay: 500 });
   const isProductFormOpen = useSelector((state) => state.ui.isProductFormOpen);
@@ -27,7 +30,13 @@ function Products() {
       setTimeout(()=> setAnimateIcon(false), 500);
     }
   },[noOfSelectedProducts])
-  
+
+  const handleDeleteIconClick = () => {
+          if(noOfSelectedProducts === 0){return}
+          setDeleteMultipleProducts(true)
+          dispatch(handleIsAnyModalOpen())
+    }
+
   return (
     <>
      <div className={`flex flex-col gap-4 min-h-full h-full
@@ -78,6 +87,7 @@ function Products() {
                           ${noOfSelectedProducts !== 0 ? 'text-red-600' : ''} 
                           ${animateIcon ? 'scale-140 -translate-y-1' : 'scale-100 translate-y-0'}
                       `}
+                      onClick={handleDeleteIconClick}
                       >
                         <RiDeleteBin6Fill/>
                       </span>
@@ -117,11 +127,24 @@ function Products() {
               setNoOfSelectedProducts = {setNoOfSelectedProducts}
               debouncedSearchTerm={debouncedSearchTerm}
               setIsUsersAvailable = {setIsUsersAvailable}
+              confirmDeleteMany = {confirmDeleteMany}
+              setConfirmDeleteMany = {setConfirmDeleteMany}
             />
         </div>
         </div>
         {isProductFormOpen && 
          <ProductForm />
+        }
+        {deleteMultipleProducts &&
+        <Confirmation 
+            heading={"Delete Multiple Products"}
+            message={`Are you sure you want to delete ${noOfSelectedProducts} products?`}
+            btn1Label={"Delete"}
+            btn2Label={"Cancel"}
+            type={"danger"}
+            setIsConfirmationModalOpen={setDeleteMultipleProducts}
+            handleConfirmation={() => setConfirmDeleteMany(true)}
+        /> 
         }
         </>
   )

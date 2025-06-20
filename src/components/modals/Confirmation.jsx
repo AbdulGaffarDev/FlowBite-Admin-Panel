@@ -25,14 +25,16 @@ const handleConfirm = () => {
           <span 
             onClick={handleClose}
           >
-            <IoClose className='absolute right-1 top-1 font-extrabold text-5xl hoverEffect hover:text-red-500'/>
+            <IoClose className={`absolute right-1 top-1 font-extrabold text-5xl  h-8 w-8 mt-1 mr-1 cursor-pointer rounded-sm p-1
+                  ${themeState === 'dark' ? 'hover:bg-blue-900 text-white' : 'hover:bg-gray-100 text-black'}
+              `}/>
           </span>
           <h1
             className={`font-bold text-2xl ${type === 'danger' ? 'text-red-600' : 'text-blue-700'}`}
           >
             {heading}
           </h1>
-          <p className={`py-3 ${type === 'danger' ? 'text-red-600' : 'text-blue-700'}`}>
+          <p className={`py-3 ${themeState !== 'dark' ? type === 'danger' ? 'text-red-600' : 'text-blue-700' : 'text-white'}`}>
             {message}
           </p> 
           <div className='flex items-center justify-evenly mt-2'>

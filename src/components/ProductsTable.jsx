@@ -9,7 +9,7 @@ import { handleIsAnyModalOpen } from "../features/ui/uiSlice";
 import Confirmation from "./modals/Confirmation";
 
 
-function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsersAvailable}) {
+function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsersAvailable, confirmDeleteMany, setConfirmDeleteMany}) {
     const [selectedProducts, setSelectedProducts] = useState({});
     const [dataToPrint, setDataToPrint] = useState([])
     const [hoveredBadge, setHoveredBadge] = useState(null)
@@ -102,7 +102,41 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
             }
             setProductToDelete(null)
     }
+
+    const deleteMultipleProducts = async () => {
+        let noOfDeletedProducts = 0;
+        let noOfProductsFailedToDelete = 0;
+        const selectedProductsIds = Object.entries(selectedProducts)  //gives an array of [key, value] pairs
+                .filter(([key, value]) => value === true)
+                .map(([key]) => Number(key));
+        for(let id of selectedProductsIds){
+            try{
+                const res = await deleteProduct(id)
+                console.log(res)
+                if(res.message){
+                    noOfProductsFailedToDelete++;
+                }else{
+                    noOfDeletedProducts++;
+                }
+            }catch(err){
+                noOfProductsFailedToDelete++;
+                console.error(`Failed to delete the product with ID ${id} : ${err}`)
+            }
+        }
+        noOfDeletedProducts !== 0 ? toast.success(`${noOfDeletedProducts} products deleted successfully.`) : ''
+        noOfProductsFailedToDelete !== 0 ? toast.error(`Failed to delete ${noOfProductsFailedToDelete} products.`) : ''; 
+        setNoOfSelectedProducts(0) //Resetting NoOfSelectedProducts 
+        setSelectedProducts({})//Resetting selected products
+        setConfirmDeleteMany(false)    
+        }
     
+    //handle multiple delete
+    useEffect(()=> {
+        if(confirmDeleteMany){
+            deleteMultipleProducts()          
+        }
+    },[confirmDeleteMany])
+
     return (
     <>
     <div className={`max-w-full min-w-max min-h-full h-full m-3 box-border ${isAnyModalOpen ? 'blurred' : ''}`}>
