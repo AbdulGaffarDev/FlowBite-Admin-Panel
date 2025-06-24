@@ -21,7 +21,7 @@ function useProducts() {
             return data;
         }catch(err){
             console.error("Error occures while fetching single product" , err)
-            return {err : true, message : 'Failed to fetch product.'};
+            return {err : true, message : 'Failed to fetch product due to ' + err.message + '.'};
         }finally{
             setIsSubmitting(false)
         }

@@ -141,7 +141,9 @@ function Products() {
         </div>
         </div>
         {isProductFormOpen && 
-         <ProductForm />
+         <ProductForm 
+            handleClose = {() => dispatch(handleProductForm())}
+         />
         }
         {deleteMultipleProducts &&
         <Confirmation 

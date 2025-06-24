@@ -30,6 +30,7 @@ const Users = () => {
   let dispatch = useDispatch();
   let handleCloseAddUserForm = () => setIsAddUserFormOpen(false)
   let handleShowInfo = () =>{
+        if(noOfSelectedUsers === 0){return}
         setshowPopupFor('showInfo')
         dispatch(handlePopup())
   }

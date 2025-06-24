@@ -7,6 +7,7 @@ import ViewProduct from "./modals/ViewProduct";
 import useProducts from "../services/useProducts";
 import { handleIsAnyModalOpen } from "../features/ui/uiSlice";
 import Confirmation from "./modals/Confirmation";
+import ProductForm from "./ProductForm";
 
 
 function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsersAvailable, confirmDeleteMany, setConfirmDeleteMany}) {
@@ -15,6 +16,7 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
     const [hoveredBadge, setHoveredBadge] = useState(null)
     const [productToView, setProductToView] = useState(null)
     const [productToDelete, setProductToDelete] = useState(null)
+    const [productToUpdate, setProductToUpdate] = useState(null)
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(null)
     const dispatch = useDispatch();
     const isProductFormOpen = useSelector(state => state.ui.isProductFormOpen);
@@ -137,6 +139,14 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
         }
     },[confirmDeleteMany])
 
+    const handleOpenUpdateForm = (id) => {
+        setProductToUpdate(id);
+        dispatch(handleIsAnyModalOpen())
+    }
+    const handleCloseUpdateForm = () => {
+        setProductToUpdate(null);
+        dispatch(handleIsAnyModalOpen());
+    }
     return (
     <>
     <div className={`max-w-full min-w-max min-h-full h-full m-3 box-border ${isAnyModalOpen ? 'blurred' : ''}`}>
@@ -234,7 +244,7 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
                         >
                             <button 
                               className='iconStyle bg-blue-500 hover:bg-blue-700'
-                            //   onClick={() => handleOpenEditForm(product.id)}
+                              onClick={() => handleOpenUpdateForm(product.id)}
                             >
                                 <FaEdit/>
                             </button>
@@ -275,6 +285,12 @@ function ProductsTable({setNoOfSelectedProducts, debouncedSearchTerm, setIsUsers
             setIsConfirmationModalOpen={setIsConfirmationModalOpen}
             handleConfirmation={handleDeleteSingleProduct}
         /> 
+   }
+   {productToUpdate &&
+        <ProductForm 
+            handleClose = {handleCloseUpdateForm}
+            productToUpdate = {productToUpdate}
+        />
    }
     </>
   )
